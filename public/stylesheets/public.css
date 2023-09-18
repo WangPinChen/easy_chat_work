@@ -1,0 +1,46 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Cookie', cursive;
+  font-family: 'Noto Sans TC', sans-serif;
+}
+
+p {
+  margin: 0;
+}
+
+input {
+  border: 1px solid #a9b8c7;
+  border-radius: 5px;
+}
+
+input:hover {
+  border: 1px solid #737e89;
+}
+
+input:focus {
+  border: 1px solid #018ffd;
+  outline: none;
+}
+
+a {
+  text-decoration: none;
+  color: #018ffd;
+}
+
+a:hover {
+  color: #027bd7;
+}
+
+button {
+  background-color: #018ffd;
+  border: none;
+  padding: 0.5rem 1rem;
+  color: white;
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #027bd7;
+}

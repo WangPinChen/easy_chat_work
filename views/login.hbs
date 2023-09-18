@@ -1,0 +1,161 @@
+<style>
+  main {
+    display: flex;
+  }
+
+  .left-container {
+    width: 50%;
+    min-width: 500px;
+    height: 100vh;
+    background: url(/images/login-background.jpg);
+    position: relative;
+  }
+
+  .img-container {
+    width: 50%;
+    min-width: 285px;
+    background-color: rgb(255, 255, 255, 0.7);
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 25%;
+    left: 50%;
+    padding: 1rem 3rem;
+    border-radius: 15px;
+  }
+
+  .img-container .logo-content {
+    display: flex;
+    align-items: center;
+  }
+
+  .img-container .logo-content .logo-img {
+    width: 120px;
+  }
+
+  .img-container .logo-content .logo-title {
+    font-size: 4rem;
+    color: #018ffd;
+    font-weight: 900;
+    text-shadow: 2px 2px 4px rgba(1, 143, 253, 0.5);
+    letter-spacing: 15px;
+  }
+
+  .img-container .slogan {
+    color: #83898e;
+  }
+
+  .form-container {
+    padding: 5rem;
+  }
+
+  .form-container .banner .img-container {
+    display: none;
+  }
+
+  .login-form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .login-form div {
+    margin-bottom: 3rem;
+    position: relative;
+  }
+
+  .login-form label {
+    position: absolute;
+    top: -15px;
+    left: 15px;
+    background-color: white;
+    color: #018ffd;
+    padding: 0 0.5rem;
+    display: none;
+  }
+
+  .login-form input,
+  .login-form button {
+    font-size: 2rem;
+  }
+
+  .login-form input {
+    padding: 0.5rem;
+  }
+
+  .login-form button {
+    margin-bottom: 2rem;
+  }
+
+  @media screen and (max-width: 768px) {
+    .left-container {
+      display: none;
+    }
+
+    .form-container {
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .form-container .banner .img-container {
+      display: block;
+      position: relative;
+    }
+  }
+</style>
+
+<main>
+  <div class="left-container">
+    <div class="img-container">
+      <div class="logo-content">
+        <img class="logo-img" src="/images/LOGO.png" alt="">
+        <p class="logo-title">隨聊</p>
+      </div>
+      <p class="slogan">加入隨聊，一起輕鬆聊吧。</p>
+    </div>
+  </div>
+  <div class="form-container">
+    <div class="banner">
+      <div class="img-container">
+        <div class="logo-content">
+          <img class="logo-img" src="/images/LOGO.png" alt="">
+          <p class="logo-title">隨聊</p>
+        </div>
+        <p class="slogan">加入隨聊，一起輕鬆聊吧。</p>
+      </div>
+    </div>
+    <form class="login-form" action="">
+      <div>
+        <label for="account">帳號:</label>
+        <input class="account" name="account" id="account" type="text" placeholder="account" required>
+      </div>
+      <div>
+        <label for="password">密碼:</label>
+        <input class="password" name="password" id="password" type="password" placeholder="password" required>
+      </div>
+      <button type="submit">登入</button>
+    </form>
+    <p>
+      還沒有帳號嗎? 來
+      <a href="/register">註冊</a>
+      吧。
+    </p>
+  </div>
+</main>
+
+<script>
+  const accountInput = document.querySelector('.account')
+  const passwordInput = document.querySelector('.password')
+
+  function addLable(e) {
+    e.target.placeholder = ''
+    document.querySelector(`label[for="${e.target.className}"]`).style.display = "block"
+  }
+  function removeLable(e) {
+    e.target.placeholder = e.target.className
+    document.querySelector(`label[for="${e.target.className}"]`).style.display = "none"
+  }
+
+  accountInput.addEventListener('focus', addLable)
+  accountInput.addEventListener('blur', removeLable)
+  passwordInput.addEventListener('focus', addLable)
+  passwordInput.addEventListener('blur', removeLable)
+</script>
