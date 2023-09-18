@@ -5,14 +5,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  {{!-- 公用CSS --}}
   <link rel="stylesheet" href="/stylesheets/public.css" />
+  {{!-- google-fonts --}}
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cookie&family=Noto+Sans+TC:wght@400;900&display=swap"
     rel="stylesheet">
+  {{!-- font-awsome --}}
+  <script src="https://kit.fontawesome.com/93beaba2ba.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
+  {{> messages}}
   {{{body}}}
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>

@@ -1,0 +1,94 @@
+<style>
+  .alert {
+    border-radius: 15px;
+    margin: 2rem 0;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 25%;
+    background-color: rgba(255, 255, 255, 0.75);
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 5%;
+    left: 50%;
+    opacity: 1;
+    /* 初始透明度为1，即完全不透明 */
+    transition: opacity 2s ease;
+    /* 添加渐变效果，2秒内过渡，使用"ease"作为过渡函数 */
+    z-index: 1;
+  }
+
+  .alert-success {
+    border: 1px solid #018ffd;
+  }
+
+  .alert-warning {
+    border: 1px solid #d93b3b;
+  }
+
+  .message-content {
+    display: flex;
+    align-items: center;
+  }
+
+  .alert .fa-circle-check {
+    font-size: 1.75rem;
+    color: #018ffd;
+    margin-right: 0.5rem;
+  }
+
+  .alert .fa-triangle-exclamation {
+    font-size: 1.75rem;
+    color: #d93b3b;
+    margin-right: 0.5rem;
+  }
+
+  .alert button {
+    font-size: 1.25rem;
+    width: 5%;
+    background-color: rgba(255, 255, 255, 0.75);
+    color: black;
+  }
+
+  .alert button:hover {
+    background-color: rgba(255, 255, 255, 0.75);
+  }
+</style>
+{{#if success_msg}}
+<div class="alert alert-success alert-dismissible" role="alert">
+  <div class="message-content">
+    <i class="fa-regular fa-circle-check"></i>
+    <div>{{success_msg}} </div>
+  </div>
+  <button type="button" class="" data-bs-dismiss="alert" aria-label="Close">
+    <i class="fa-solid fa-xmark"></i>
+  </button>
+</div>
+{{/if}}
+
+{{#if warning_msg}}
+<div class="alert alert-warning alert-dismissible" role="alert">
+  <div class="message-content">
+    <i class="fa-solid fa-triangle-exclamation"></i>
+    <div>{{warning_msg}} </div>
+  </div>
+  <button type="button" class="" data-bs-dismiss="alert" aria-label="Close">
+    <i class="fa-solid fa-xmark"></i>
+  </button>
+</div>
+{{/if}}
+
+
+<script>
+  const alertSuccess = document.querySelector('.alert')
+  setTimeout(() => {
+    alertSuccess.style.opacity = "0"
+  }, 3000)
+
+  const faXmark = document.querySelector('.fa-xmark')
+  function closeMsg() {
+    document.querySelector('.alert').remove()
+  }
+  faXmark.addEventListener('click', closeMsg)
+</script>
