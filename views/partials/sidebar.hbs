@@ -1,0 +1,152 @@
+<style>
+  .sidebar {
+    border-right: 1px solid #cfdae3;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100vh;
+  }
+
+  .log-container img {
+    width: 150px
+  }
+
+  .sidebar-ul {
+    height: 100%;
+  }
+
+  .sidebar-ul li {
+    color: #83898e;
+    font-size: 1.25rem;
+    margin: 0.25rem 0.5rem;
+    padding: 0.75rem;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+  }
+
+  .sidebar-ul li:hover {
+    background-color: #018ffd;
+    color: white;
+  }
+
+  .sidebar-ul li i {
+    margin-right: 0.75rem;
+  }
+
+  .logout-container button {
+    width: 100%;
+    margin: 0.25rem 0;
+    font-size: 1.125rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .logout-container .sub-form {
+    display: none;
+  }
+
+  @media screen and (max-width:1280px) {
+    .log-container img {
+      width: 75px
+    }
+
+    .sidebar-ul li {
+      justify-content: center;
+    }
+
+    .sidebar-ul li i {
+      font-size: 1.5rem;
+    }
+
+    .sidebar-ul li p {
+      display: none;
+    }
+
+    .logout-container i {
+      display: none;
+    }
+  }
+
+  @media screen and (max-width:768px) {
+    .sidebar {
+      height: 75px;
+      width: 100%;
+      flex-direction: row;
+      justify-content: center;
+      align-self: center;
+      position: fixed;
+      bottom: 0;
+      border-top: 1px solid #cfdae3;
+    }
+
+    .logout-container,
+    .log-container {
+      display: none;
+    }
+
+
+    .sidebar-ul {
+      display: flex;
+      width: 100%;
+      justify-content: space-around;
+    }
+
+
+
+  }
+</style>
+
+<section class="sidebar">
+  <div class="log-container">
+    <a href="/">
+      <img src="/images/LOGO.png" alt="">
+    </a>
+  </div>
+
+  <ul class="sidebar-ul">
+    <a href="">
+      <li>
+        <i class="fa-solid fa-house"></i>
+        <p>
+          首頁
+        </p>
+      </li>
+    </a>
+    <a href="">
+      <li>
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <p>
+          探索
+        </p>
+      </li>
+    </a>
+    <a href="">
+      <li>
+        <i class="fa-solid fa-user-group"></i>
+        <p>
+          公開聊天
+        </p>
+      </li>
+    </a>
+    <a href="">
+      <li>
+        <i class="fa-solid fa-comments"></i>
+        <p>
+          私人聊天
+        </p>
+      </li>
+    </a>
+  </ul>
+
+  <div class="logout-container">
+    <form class="main-form" action="/logout" method="post">
+      <button>
+        <i class="fa-solid fa-right-from-bracket"></i>
+        <p>登出</p>
+      </button>
+    </form>
+  </div>
+
+</section>

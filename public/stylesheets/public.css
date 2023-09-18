@@ -44,3 +44,9 @@ button {
 button:hover {
   background-color: #027bd7;
 }
+
+ul {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
