@@ -62,12 +62,20 @@
   .login-form div {
     display: flex;
     flex-direction: column;
-    margin-bottom: 3rem;
+    margin-bottom: 2.5rem;
   }
 
   .login-form label {
     color: #83898e;
     margin: 0.5rem 0;
+  }
+
+  .login-form span {
+    color: #83898e;
+  }
+
+  span.error {
+    color: #d93b3b;
   }
 
   .login-form input,
@@ -120,23 +128,44 @@
         <p class="slogan">加入隨聊，一起輕鬆聊吧。</p>
       </div>
     </div>
-    <form class="login-form" action="">
+    <form class="login-form" action="/register" method="post">
       <div>
-        <label for="name">姓名:</label>
-        <input class="name" name="name" id="name" type="text" placeholder="name" required>
+        <label for="name">姓名:</span></label>
+        <input class="name" name="name" id="name" type="text" placeholder="name" value="{{name}}" required>
+        <span class="
+        {{#if errors.isNameError}}
+        error
+        {{/if}}
+        ">請輸入1-50字</span>
       </div>
       <div>
-        <label for="account">帳號:</label>
-        <input class="account" name="account" id="account" type="text" placeholder="account" required>
-      </div>
-      <div>
-        <label for="password">密碼:</label>
-        <input class="password" name="password" id="password" type="password" placeholder="password" required>
-      </div>
-      <div>
-        <label for="passwordCheck">確認密碼:</label>
-        <input class="password" name="passwordCheck" id="passwordCheck" type="passwordCheck" placeholder="password"
+        <label for="account">帳號: <span></span></label>
+        <input class="account" name="account" id="account" type="text" placeholder="account" value="{{account}}"
           required>
+        <span class="
+        {{#if errors.isAccountError}}
+        error
+        {{/if}}
+        ">請輸入英文小寫字母搭配數字，6-20碼。　{{#if errors.accountMsg}} {{errors.accountMsg}} {{/if}}</span>
+      </div>
+      <div>
+        <label for="password">密碼: <span></span></label>
+        <input class="password" name="password" id="password" type="password" placeholder="password" required>
+        <span class="
+        {{#if errors.isPasswordError}}
+        error
+        {{/if}}
+        ">請輸入英文大或小寫字母搭配數字，6-20碼。{{#if errors.passwordCheckMsg}} {{errors.passwordCheckMsg}} {{/if}} </span>
+      </div>
+      <div>
+        <label for="passwordCheck">確認密碼: <span></span></label>
+        <input class="passwordCheck" name="passwordCheck" id="passwordCheck" type="password" placeholder="password"
+          required>
+        <span class="
+        {{#if errors.isPasswordCheckError}}
+        error
+        {{/if}}
+        ">請輸入英文大或小寫字母搭配數字，6-20碼。{{#if errors.passwordCheckMsg}} {{errors.passwordCheckMsg}} {{/if}} </span>
       </div>
       <button type="submit">註冊</button>
     </form>

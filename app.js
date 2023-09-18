@@ -14,6 +14,7 @@ const io = new Server(server)
 app.set('view engine', 'hbs')
 app.engine("hbs", handlebars({ defaultLayout: 'main', extname: ".hbs" }))
 app.use("/", express.static("public"))
+app.use(express.urlencoded({ extended: true }))
 app.use(routes)
 
 server.listen(port, () => console.log(`Example app listening on port ${port}!`))
