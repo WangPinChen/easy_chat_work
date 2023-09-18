@@ -60,18 +60,14 @@
   }
 
   .login-form div {
+    display: flex;
+    flex-direction: column;
     margin-bottom: 3rem;
-    position: relative;
   }
 
   .login-form label {
-    position: absolute;
-    top: -15px;
-    left: 15px;
-    background-color: white;
-    color: #018ffd;
-    padding: 0 0.5rem;
-    display: none;
+    color: #83898e;
+    margin: 0.5rem 0;
   }
 
   .login-form input,
@@ -126,6 +122,10 @@
     </div>
     <form class="login-form" action="">
       <div>
+        <label for="name">姓名:</label>
+        <input class="name" name="name" id="name" type="text" placeholder="name" required>
+      </div>
+      <div>
         <label for="account">帳號:</label>
         <input class="account" name="account" id="account" type="text" placeholder="account" required>
       </div>
@@ -133,11 +133,16 @@
         <label for="password">密碼:</label>
         <input class="password" name="password" id="password" type="password" placeholder="password" required>
       </div>
-      <button type="submit">登入</button>
+      <div>
+        <label for="passwordCheck">確認密碼:</label>
+        <input class="password" name="passwordCheck" id="passwordCheck" type="passwordCheck" placeholder="password"
+          required>
+      </div>
+      <button type="submit">註冊</button>
     </form>
     <p>
-      還沒有帳號嗎? 來
-      <a href="/register">註冊</a>
+      已經有帳號了嗎? 來
+      <a href="/login">登入</a>
       吧。
     </p>
   </div>
@@ -147,22 +152,7 @@
   window.addEventListener('load', function () {
     const formContainer = document.querySelector('.form-container');
     formContainer.style.filter = 'none'
-  });
+  })
 
-  const accountInput = document.querySelector('.account')
-  const passwordInput = document.querySelector('.password')
 
-  function addLable(e) {
-    e.target.placeholder = ''
-    document.querySelector(`label[for="${e.target.className}"]`).style.display = "block"
-  }
-  function removeLable(e) {
-    e.target.placeholder = e.target.className
-    document.querySelector(`label[for="${e.target.className}"]`).style.display = "none"
-  }
-
-  accountInput.addEventListener('focus', addLable)
-  accountInput.addEventListener('blur', removeLable)
-  passwordInput.addEventListener('focus', addLable)
-  passwordInput.addEventListener('blur', removeLable)
 </script>
