@@ -7,7 +7,7 @@ const userController = {
   },
   login: (req, res) => {
     req.flash('success_msg', '登入成功。')
-    res.redirect('/')
+    res.redirect(`/${req.user.id}`)
   },
   registerPage: (req, res) => {
     res.render('register')
@@ -51,6 +51,11 @@ const userController = {
       password: hash
     })
     return res.redirect('/login')
+  },
+  getHomePage: async (req, res) => {
+    const user = req.user
+    console.log(req.user)
+    res.render('home', { user })
   }
 
 }
