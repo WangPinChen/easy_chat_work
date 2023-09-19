@@ -22,7 +22,7 @@
     object-fit: cover;
   }
 
-  .avatar-container {
+  .banner-container .avatar-container {
     position: absolute;
     display: flex;
     align-items: end;
@@ -42,7 +42,7 @@
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   }
 
-  .avatar-container p {
+  .banner-container .avatar-container p {
     background-color: rgb(255, 255, 255, 0.9);
     padding: 0.5rem 3rem;
     font-size: 1.5rem;
@@ -60,7 +60,7 @@
     cursor: pointer;
   }
 
-  .self-intro-container,
+  main .self-intro-container,
   .comment-container {
     width: 90%;
     margin: 1rem auto;
@@ -69,13 +69,13 @@
     padding: 1rem;
   }
 
-  .self-intro-container h1 {
+  main .self-intro-container h1 {
     margin-bottom: 0.5rem;
     border-bottom: 1px solid #cfdae3;
     font-size: 1.5rem;
   }
 
-  .self-intro-container p {
+  main .self-intro-container p {
     font-size: 1.25rem;
   }
 
@@ -141,6 +141,7 @@
   }
 
   .modal-content {
+    width: 80%;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -152,15 +153,86 @@
   }
 
   .close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
     font-size: 20px;
     cursor: pointer;
+    display: block;
+    width: 100%;
+    text-align: end;
+  }
+
+  .close:hover {
+    color: #018ffd;
   }
 
   .modal-content .edit-form input {
     margin-bottom: 0.5rem;
+    font-size: 1.5rem;
+  }
+
+  .modal-content .background-container,
+  .modal-content .avatar-container {
+    position: relative;
+  }
+
+  .modal-content .edit-form .background-img {
+    width: 100%;
+    aspect-ratio: 4/1;
+    object-fit: cover;
+  }
+
+  .modal-content .fa-image {
+    font-size: 3rem;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    color: rgb(255, 255, 255, 0.8);
+    text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+  }
+
+  .modal-content .fa-image:hover {
+    color: rgb(1, 143, 253, 0.9);
+  }
+
+  .modal-content .background-container input,
+  .modal-content .avatar-container input {
+    display: none;
+  }
+
+  .modal-content .edit-form-bottom {
+    display: flex;
+    align-items: stretch;
+  }
+
+  .modal-content .avatar-name-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    margin-right: 1rem;
+  }
+
+  .modal-content .avatar-container,
+  .modal-content .name-container {
+    max-width: 350px;
+  }
+
+  .modal-content .avatar-container img {
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+  }
+
+  .modal-content .self-intro-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .modal-content .self-intro-container textarea {
+    font-size: 1.5rem;
+    width: 100%;
   }
 
   .modal-content .edit-form button {
@@ -182,7 +254,7 @@
       margin-bottom: 5rem;
     }
 
-    .avatar-container {
+    .banner-container .avatar-container {
       position: relative;
     }
 
@@ -190,8 +262,12 @@
       width: 35%;
     }
 
-    .avatar-container p {
+    .banner-container .avatar-container p {
       width: 50%;
+    }
+
+    .modal-content .edit-form-bottom {
+      display: block;
     }
   }
 </style>
@@ -275,12 +351,37 @@
     <div class="modal-content">
       <span class="close">&times;</span>
       <form class="edit-form" action="">
-        <input name="background" type="text">
-        <div>
-          <input name="avatar" type="text">
-          <input name="name" type="text">
+
+        <div class="background-container">
+          <img class="background-img" src="https://i.imgur.com/J45vU3c.jpg" alt="">
+          <label for="background">
+            <i class="fa-solid fa-image"></i>
+          </label>
+          </img>
+          <input class="background-input" name="background" type="file" id="background">
         </div>
-        <textarea name="selfIntro" id="" cols="30" rows="10"></textarea>
+
+        <div class="edit-form-bottom">
+          <div class="avatar-name-container">
+            <div class="avatar-container">
+              <img class="avatar-img" src="https://i.imgur.com/o1a4kLI.png" alt="">
+              <label for="avatar">
+                <i class="fa-solid fa-image"></i>
+              </label>
+              <input class="avatar-input" name="avatar" type="file" id="avatar">
+            </div>
+            <div class="name-container">
+              <label for="">暱稱:</label>
+              <input type="text">
+            </div>
+          </div>
+
+          <div class="self-intro-container">
+            <label for="self-intro">自我介紹</label>
+            <textarea name="selfIntro" rows="10" id="self-intro"></textarea>
+          </div>
+        </div>
+
         <button>儲存</button>
       </form>
     </div>
@@ -292,19 +393,34 @@
   const modal = document.getElementById("myModal")
   const faUserGear = document.querySelector('.fa-user-gear')
   const closeBtn = document.getElementsByClassName("close")[0]
+  const backgroundInput = document.querySelector('.background-input')
+  const avatarInput = document.querySelector('.avatar-input')
+
 
   faUserGear.onclick = function () {
-    modal.style.display = "block";
+    modal.style.display = "block"
   }
 
   closeBtn.onclick = function () {
-    modal.style.display = "none";
+    modal.style.display = "none"
   }
 
   window.onclick = function (event) {
     if (event.target == modal) {
-      modal.style.display = "none";
+      modal.style.display = "none"
     }
   }
+
+  function removeImg(e) {
+    if (e.target === backgroundInput) {
+      document.querySelector('.background-img').src = URL.createObjectURL(backgroundInput.files[0])
+    }
+
+    if (e.target === avatarInput) {
+      document.querySelector('.avatar-img').src = URL.createObjectURL(avatarInput.files[0])
+    }
+  }
+  backgroundInput.addEventListener('change', removeImg)
+  avatarInput.addEventListener('change', removeImg)
 
 </script>
