@@ -1,5 +1,8 @@
 const bcrypt = require("bcryptjs")
+const multer = require('multer')
+const upload = multer({ dest: 'temp/' }).fields([{ name: 'avatar', maxCount: 1 }, { name: 'background', maxCount: 1 }])
 const { User } = require('../models')
+const { imgurFileHandler } = require('../helpers/file-helpers')
 
 const userController = {
   loginPage: (req, res) => {
@@ -54,8 +57,33 @@ const userController = {
   },
   getHomePage: async (req, res) => {
     const user = req.user
-    console.log(req.user)
     res.render('home', { user })
+  },
+  putUser: (req, res) => {
+    upload(req, res, async () => {
+      console.log(req.files)
+      let backgroundPath = ''
+      let avatarPath = ''
+      if (Object.keys(req.files).length !== 0) {
+        const backgroundFile = req.files.background[0]
+        const avatarFile = req.files.avatar[0]
+        console.log(backgroundFile, avatarFile)
+        backgroundPath = await imgurFileHandler(backgroundFile)
+        avatarPath = await imgurFileHandler(avatarFile)
+      }
+
+      console.log(backgroundPath, avatarPath)
+
+      const user = await User.findOne({ where: { id: req.user.id } })
+      await user.update({
+        name: req.body.name,
+        selfIntro: req.body.selfIntro,
+        avatar: avatarPath || user.avatar,
+        background: backgroundPath || user.background
+      })
+
+      return res.redirect('back')
+    })
   }
 
 }

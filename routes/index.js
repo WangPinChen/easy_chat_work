@@ -1,13 +1,14 @@
 const express = require("express")
 const router = express.Router()
 const passport = require('../config/passport')
-
 const api = require('./modules/api')
+const upload = require('../middleware/multer')
 
 const userController = require('../controllers/user-controller')
 
-
 router.use('/api', api)
+
+router.put('/user/:userId', userController.putUser)
 router.get('/login', userController.loginPage)
 router.post('/login', passport.authenticate("local", { failureRedirect: "/login", failureMessage: true }), userController.login)
 router.get('/register', userController.registerPage)

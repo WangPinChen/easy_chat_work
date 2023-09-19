@@ -61,6 +61,10 @@
     cursor: pointer;
   }
 
+  .banner-container .fa-user-gear:hover {
+    color: white;
+  }
+
   main .self-intro-container,
   .comment-container {
     width: 90%;
@@ -300,11 +304,7 @@
     <section class="self-intro-container">
       <h1>自我介紹</h1>
       <p>
-        接下來，我們要針對 banner 內部小元件調整排版。
-
-        先從 main banner 開始，我們來看一下框線稿，文字和按鈕垂直置中，水平方向則是置左對齊。所以設定 alignitems:flex-start 和 justify-content: center，這麼一來 main
-        banner
-        排列方式就如框線稿預期，而兩個 sub-banner 裡的小元件位置則是不需要做改變的。
+        {{user.selfIntro}}
       </p>
     </section>
 
@@ -358,12 +358,11 @@
       </div>
     </section>
   </main>
-
+  {{!-- modal --}}
   <div id="myModal" class="modal">
-    <!-- 模态框内容 -->
     <div class="modal-content">
       <span class="close">&times;</span>
-      <form class="edit-form" action="/user/{{user.id}}/edit?_method=PUT" method="post">
+      <form class="edit-form" action="/user/{{user.id}}?_method=PUT" method="post" enctype="multipart/form-data">
 
         <div class="background-container">
           <img class="background-img" src="
@@ -397,13 +396,13 @@
             </div>
             <div class="name-container">
               <label for="">暱稱:</label>
-              <input type="text" value="{{user.name}}">
+              <input type="text" value="{{user.name}}" name="name">
             </div>
           </div>
 
           <div class="self-intro-container">
             <label for="self-intro">自我介紹</label>
-            <textarea name="selfIntro" rows="10" id="self-intro"></textarea>
+            <textarea name="selfIntro" rows="10" id="self-intro">{{user.selfIntro}}</textarea>
           </div>
         </div>
 

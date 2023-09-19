@@ -88,3 +88,6 @@ typings/
 
 test.js
 default-img.json
+
+temp/
+upload/
