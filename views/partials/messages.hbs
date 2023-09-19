@@ -44,15 +44,8 @@
     margin-right: 0.5rem;
   }
 
-  .alert button {
-    font-size: 1.25rem;
-    width: 5%;
-    background-color: rgba(255, 255, 255, 0.75);
-    color: black;
-  }
-
-  .alert button:hover {
-    background-color: rgba(255, 255, 255, 0.75);
+  .alert .fa-xmark {
+    cursor: pointer;
   }
 </style>
 {{#if success_msg}}
@@ -61,9 +54,7 @@
     <i class="fa-regular fa-circle-check"></i>
     <div>{{success_msg}} </div>
   </div>
-  <button type="button" class="" data-bs-dismiss="alert" aria-label="Close">
-    <i class="fa-solid fa-xmark"></i>
-  </button>
+  <i class="fa-solid fa-xmark"></i>
 </div>
 {{/if}}
 
@@ -73,9 +64,7 @@
     <i class="fa-solid fa-triangle-exclamation"></i>
     <div>{{warning_msg}} </div>
   </div>
-  <button type="button" class="" data-bs-dismiss="alert" aria-label="Close">
-    <i class="fa-solid fa-xmark"></i>
-  </button>
+  <i class="fa-solid fa-xmark"></i>
 </div>
 {{/if}}
 

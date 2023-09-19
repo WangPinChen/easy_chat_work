@@ -313,14 +313,18 @@
     <section class="self-intro-container">
       <h1>自我介紹</h1>
       <p>
+        {{#if user.selfIntro}}
         {{user.selfIntro}}
+        {{else}}
+        <a href="#" class="link-to-faUserGear">點我</a>幫自己寫下自我介紹吧。
+        {{/if }}
       </p>
     </section>
 
     <section class="comment-container">
       <div class="comment-form-container">
         <form class="comment-form" action="">
-          <input type="text" placeholder="留下給XXX的留言吧。">
+          <input type="text" placeholder="留下給 {{user.name}} 的留言吧。">
           <button>送出</button>
         </form>
       </div>
@@ -430,6 +434,7 @@
 
   const modal = document.getElementById("myModal")
   const faUserGear = document.querySelector('.fa-user-gear')
+  const linkToFaUserGear = document.querySelector('.link-to-faUserGear')
   const closeBtn = document.getElementsByClassName("close")[0]
   const backgroundInput = document.querySelector('.background-input')
   const avatarInput = document.querySelector('.avatar-input')
@@ -459,5 +464,5 @@
   }
   backgroundInput.addEventListener('change', changeImage)
   avatarInput.addEventListener('change', changeImage)
-
+  linkToFaUserGear.addEventListener('click', () => faUserGear.click())
 </script>
