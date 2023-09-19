@@ -2,9 +2,309 @@
   .body-container {
     display: flex;
   }
+
+  main {
+    width: 95%;
+    max-width: 1500px;
+    margin-left: 250px;
+    border-left: 1px solid #cfdae3;
+    border-right: 1px solid #cfdae3;
+  }
+
+  .banner-container {
+    width: 100%;
+    position: relative;
+  }
+
+  .banner-container .background {
+    width: 100%;
+    aspect-ratio: 4/1;
+    object-fit: cover;
+  }
+
+  .avatar-container {
+    position: absolute;
+    display: flex;
+    align-items: end;
+    width: auto;
+    bottom: 10%;
+    left: 5%;
+    z-index: 1;
+  }
+
+
+  .banner-container .avatar {
+    width: 20%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border-radius: 25% 25% 0 25%;
+    border: 5px solid rgb(255, 255, 255, 0.9);
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .avatar-container p {
+    background-color: rgb(255, 255, 255, 0.9);
+    padding: 0.5rem 3rem;
+    font-size: 1.5rem;
+    border-radius: 0 15px 15px 0;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .banner-container .fa-user-gear {
+    position: absolute;
+    top: 2%;
+    left: 2%;
+    color: rgb(255, 255, 255, 0.8);
+    font-size: 2rem;
+    text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+  }
+
+  .self-intro-container,
+  .comment-container {
+    width: 90%;
+    margin: 1rem auto;
+    border: 1px solid #cfdae3;
+    border-radius: 5px;
+    padding: 1rem;
+  }
+
+  .self-intro-container h1 {
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid #cfdae3;
+    font-size: 1.5rem;
+  }
+
+  .self-intro-container p {
+    font-size: 1.25rem;
+  }
+
+  .card {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    border-bottom: 3px solid #018ffd;
+    padding-bottom: 0.5rem;
+  }
+
+  .card img {
+    width: 20%;
+    height: 20%;
+    padding: 0.5rem;
+  }
+
+  .card .nameComment {
+    width: 80%;
+  }
+
+  .card .nameComment p {
+    font-size: 1.25rem;
+  }
+
+  .card .nameComment .comment {
+    word-wrap: break-word;
+  }
+
+  .comment-form-container {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .comment-form {
+    display: flex;
+    width: 80%;
+  }
+
+  .comment-form input {
+    padding: 1px 0.5rem;
+    width: 85%;
+    border-radius: 15px 0 0 15px;
+    font-size: 1.25rem;
+    height: 45px;
+  }
+
+  .comment-form button {
+    border-radius: 0 15px 15px 0;
+  }
+
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 999;
+  }
+
+  .modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+  }
+
+  .modal-content .edit-form input {
+    margin-bottom: 0.5rem;
+  }
+
+  .modal-content .edit-form button {
+    display: block;
+  }
+
+  @media screen and (max-width:1280px) {
+    main {
+      margin-left: 140px;
+    }
+  }
+
+  @media screen and (max-width:768px) {
+    main {
+      margin: 0 auto;
+    }
+
+    .comment-container {
+      margin-bottom: 5rem;
+    }
+
+    .avatar-container {
+      position: relative;
+    }
+
+    .banner-container .avatar {
+      width: 35%;
+    }
+
+    .avatar-container p {
+      width: 50%;
+    }
+  }
 </style>
 
 <div class="body-container">
   {{> sidebar}}
-  <h1>building</h1>
+  <main>
+    <section class="banner-container">
+      <img class="background" src="https://i.imgur.com/j124TsW.jpg" alt="">
+      <div class="avatar-container">
+        <img class="avatar" src="https://i.imgur.com/o1a4kLI.png" alt="">
+        <p>姓名</p>
+      </div>
+      <i class="fa-solid fa-user-gear"></i>
+    </section>
+
+    <section class="self-intro-container">
+      <h1>自我介紹</h1>
+      <p>
+        接下來，我們要針對 banner 內部小元件調整排版。
+
+        先從 main banner 開始，我們來看一下框線稿，文字和按鈕垂直置中，水平方向則是置左對齊。所以設定 alignitems:flex-start 和 justify-content: center，這麼一來 main
+        banner
+        排列方式就如框線稿預期，而兩個 sub-banner 裡的小元件位置則是不需要做改變的。
+      </p>
+    </section>
+
+    <section class="comment-container">
+      <div class="comment-form-container">
+        <form class="comment-form" action="">
+          <input type="text" placeholder="留下給XXX的留言吧。">
+          <button>送出</button>
+        </form>
+      </div>
+      <div class="card-group">
+        <div class="card">
+          <img src="https://i.imgur.com/StpIHea.png" alt="">
+          <div class="nameComment">
+            <a href="">name</a>
+            <p class="comment">commentcommentcommentcommentcommentcomment</p>
+          </div>
+        </div>
+        <div class="card">
+          <img src="https://i.imgur.com/StpIHea.png" alt="">
+          <div class="nameComment">
+            <a href="">name</a>
+            <p class="comment">commentcommentcommentcommentcommentcomment</p>
+          </div>
+        </div>
+        <div class="card">
+          <img src="https://i.imgur.com/StpIHea.png" alt="">
+          <div class="nameComment">
+            <a href="">name</a>
+            <p class="comment">commentcommentcommentcommentcommentcomment</p>
+          </div>
+        </div>
+        <div class="card">
+          <img src="https://i.imgur.com/StpIHea.png" alt="">
+          <div class="nameComment">
+            <a href="">name</a>
+            <p class="comment">commentcommentcommentcommentcommentcomment</p>
+          </div>
+
+        </div>
+
+        <div class="card">
+          <img src="https://i.imgur.com/StpIHea.png" alt="">
+          <div class="nameComment">
+            <a href="">name</a>
+            <p class="comment">commentcommentcommentcommentcommentcomment</p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <div id="myModal" class="modal">
+    <!-- 模态框内容 -->
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <form class="edit-form" action="">
+        <input name="background" type="text">
+        <div>
+          <input name="avatar" type="text">
+          <input name="name" type="text">
+        </div>
+        <textarea name="selfIntro" id="" cols="30" rows="10"></textarea>
+        <button>儲存</button>
+      </form>
+    </div>
+  </div>
+
 </div>
+
+<script>
+  const modal = document.getElementById("myModal")
+  const faUserGear = document.querySelector('.fa-user-gear')
+  const closeBtn = document.getElementsByClassName("close")[0]
+
+  faUserGear.onclick = function () {
+    modal.style.display = "block";
+  }
+
+  closeBtn.onclick = function () {
+    modal.style.display = "none";
+  }
+
+  window.onclick = function (event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+
+</script>
