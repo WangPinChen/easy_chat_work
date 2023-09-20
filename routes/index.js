@@ -19,6 +19,8 @@ router.post('/logout', userController.logout)
 router.get('/register', userController.registerPage)
 router.post('/register', userController.register)
 
+router.get('/explore', userController.getExplorePage)
+
 router.get('/', (req, res) => {
   res.redirect(`/user/${req.user.id}`)
 })

@@ -124,6 +124,9 @@ const userController = {
     })
     req.flash('success_msg', '留言成功')
     res.redirect('back')
+  },
+  getExplorePage: async (req, res) => {
+    res.render('explore')
   }
 
 }

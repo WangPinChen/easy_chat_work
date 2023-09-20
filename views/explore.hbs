@@ -1,0 +1,225 @@
+<style>
+  .body-container {
+    display: flex;
+  }
+
+  main {
+    width: 95%;
+    max-width: 1500px;
+    margin-left: 250px;
+    border-left: 1px solid #cfdae3;
+    border-right: 1px solid #cfdae3;
+  }
+
+  .card-group {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .card-group .card {
+    width: 25%;
+    aspect-ratio: 1/1;
+    position: relative;
+    padding: 0.5rem;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1)
+  }
+
+  .card-group .card:hover {
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3)
+  }
+
+  .card .background-container img {
+    width: 100%;
+    aspect-ratio: 2/1;
+    object-fit: cover;
+  }
+
+  .card .card-bottom {
+    position: absolute;
+    transform: translate(0, 0);
+    bottom: 20%;
+    left: 5%;
+  }
+
+  .card .nameAvatar {
+    display: flex;
+    align-items: end;
+  }
+
+  .card .nameAvatar .avatar-container {
+    width: 50%;
+    aspect-ratio: 1/1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(to bottom right, #018ffd, white);
+    border-radius: 15px;
+  }
+
+  .card .nameAvatar .avatar-container img {
+    width: 95%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border: 3px solid white;
+    border-radius: 15px;
+  }
+
+  .card .nameAvatar a {
+    margin-left: 0.5rem;
+    font-size: 1.5rem;
+  }
+
+  .card .name {
+    font-size: 1.5rem;
+    color: #83898e;
+  }
+
+  @media screen and (max-width:1280px) {
+    main {
+      margin-left: 140px;
+    }
+
+    .card .nameAvatar a {
+
+      font-size: 1rem;
+    }
+
+    .card .name {
+      font-size: 1rem;
+
+    }
+  }
+
+  @media screen and (max-width:768px) {
+    main {
+      margin: 0 auto;
+    }
+
+    .card-group .card {
+      width: 33%;
+    }
+  }
+</style>
+
+<div class="body-container">
+  {{> sidebar}}
+  <main>
+    <div class="card-group">
+
+
+
+      <div class="card">
+        <div class="background-container">
+          <img src="https://i.imgur.com/4cfXBkM.jpg" alt="">
+        </div>
+        <div class="card-bottom">
+          <div class="nameAvatar">
+            <div class="avatar-container">
+              <img src="https://i.imgur.com/ECXm14E.jpg" alt="">
+            </div>
+            <a href="">
+              <i class="fa-solid fa-message"></i>
+              聊聊
+            </a>
+          </div>
+          <a href="" class="name">name</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="background-container">
+          <img src="https://i.imgur.com/4cfXBkM.jpg" alt="">
+        </div>
+        <div class="card-bottom">
+          <div class="nameAvatar">
+            <div class="avatar-container">
+              <img src="https://i.imgur.com/ECXm14E.jpg" alt="">
+            </div>
+            <a href="">
+              <i class="fa-solid fa-message"></i>
+              聊聊
+            </a>
+          </div>
+          <a href="" class="name">name</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="background-container">
+          <img src="https://i.imgur.com/4cfXBkM.jpg" alt="">
+        </div>
+        <div class="card-bottom">
+          <div class="nameAvatar">
+            <div class="avatar-container">
+              <img src="https://i.imgur.com/ECXm14E.jpg" alt="">
+            </div>
+            <a href="">
+              <i class="fa-solid fa-message"></i>
+              聊聊
+            </a>
+          </div>
+          <a href="" class="name">name</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="background-container">
+          <img src="https://i.imgur.com/4cfXBkM.jpg" alt="">
+        </div>
+        <div class="card-bottom">
+          <div class="nameAvatar">
+            <div class="avatar-container">
+              <img src="https://i.imgur.com/ECXm14E.jpg" alt="">
+            </div>
+            <a href="">
+              <i class="fa-solid fa-message"></i>
+              聊聊
+            </a>
+          </div>
+          <a href="" class="name">name</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="background-container">
+          <img src="https://i.imgur.com/4cfXBkM.jpg" alt="">
+        </div>
+        <div class="card-bottom">
+          <div class="nameAvatar">
+            <div class="avatar-container">
+              <img src="https://i.imgur.com/ECXm14E.jpg" alt="">
+            </div>
+            <a href="">
+              <i class="fa-solid fa-message"></i>
+              聊聊
+            </a>
+          </div>
+          <a href="" class="name">name</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="background-container">
+          <img src="https://i.imgur.com/4cfXBkM.jpg" alt="">
+        </div>
+        <div class="card-bottom">
+          <div class="nameAvatar">
+            <div class="avatar-container">
+              <img src="https://i.imgur.com/ECXm14E.jpg" alt="">
+            </div>
+            <a href="">
+              <i class="fa-solid fa-message"></i>
+              聊聊
+            </a>
+          </div>
+          <a href="" class="name">name</a>
+        </div>
+      </div>
+
+
+
+
+
+    </div>
+  </main>
+</div>
