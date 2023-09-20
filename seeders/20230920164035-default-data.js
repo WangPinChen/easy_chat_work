@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs')
 const faker = require('faker')
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    const USER_COUNT = 60
+    const USER_COUNT = 250
     const COMMENT_COUNT = 10
     const userPromises = []
     for (let i = 1; i <= USER_COUNT; i++) {
