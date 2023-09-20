@@ -3,7 +3,8 @@ const bcrypt = require('bcryptjs')
 const faker = require('faker')
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    const USER_COUNT = 20
+    const USER_COUNT = 60
+    const COMMENT_COUNT = 10
     const userPromises = []
     for (let i = 1; i <= USER_COUNT; i++) {
       let accountNum = ''
@@ -36,7 +37,7 @@ module.exports = {
     )
     users.forEach(user => {
       const recipient_id = user.id
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < COMMENT_COUNT; i++) {
         const commenter_id = users[Math.floor(Math.random() * USER_COUNT)].id
         if (commenter_id === recipient_id) {
           i -= 1
