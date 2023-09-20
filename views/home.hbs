@@ -87,6 +87,10 @@
     font-size: 1.25rem;
   }
 
+  .comment-container h1 {
+    border-bottom: 1px solid #cfdae3;
+  }
+
   .card {
     width: 100%;
     display: flex;
@@ -120,27 +124,36 @@
   }
 
   .comment-form-container {
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 80%;
+    margin: 0.5rem auto;
+    height: 60px;
   }
 
   .comment-form {
     display: flex;
-    width: 80%;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
   }
 
   .comment-form input {
-    padding: 1px 0.5rem;
     width: 85%;
     border-radius: 15px 0 0 15px;
     font-size: 1.25rem;
-    height: 45px;
+    padding: 0 1rem;
+    height: 33px;
   }
 
   .comment-form button {
+    width: 15%;
+    height: 100%;
     border-radius: 0 15px 15px 0;
+    min-width: 27px;
+    white-space: nowrap;
+  }
+
+  .comment-form-container p {
+    color: #83898e;
   }
 
   .modal {
@@ -307,27 +320,32 @@
         " alt="">
         <p>{{user.name}}</p>
       </div>
+      {{!-- 如果訪問頁面是自己，編輯資料按鈕才會顯示 --}}
+      {{#if user.isUserSelf}}
       <i class="fa-solid fa-user-gear"></i>
+      {{/if}}
     </section>
 
     <section class="self-intro-container">
       <h1>自我介紹</h1>
       <p>
-        {{#if user.selfIntro}}
         {{user.selfIntro}}
-        {{else}}
-        <a href="#" class="link-to-faUserGear">點我</a>幫自己寫下自我介紹吧。
-        {{/if }}
       </p>
     </section>
 
     <section class="comment-container">
+      <h1>留言區</h1>
+      {{!-- 如果訪問頁面是自己，留言欄位不顯示 --}}
+      {{#if user.isUserSelf}}
+      {{else}}
       <div class="comment-form-container">
-        <form class="comment-form" action="">
-          <input type="text" placeholder="留下給 {{user.name}} 的留言吧。">
+        <form class="comment-form" action="/comment/{{user.id}}" method="post">
+          <input name="comment" type="text" placeholder="留下給 {{user.name}} 的留言吧。" required>
           <button>送出</button>
         </form>
+        <p>字數限制1-250字，<span>0</span>/250。</p>
       </div>
+      {{/if}}
       <div class="card-group">
         <div class="card">
           <img src="https://i.imgur.com/StpIHea.png" alt="">
@@ -434,19 +452,24 @@
 
   const modal = document.getElementById("myModal")
   const faUserGear = document.querySelector('.fa-user-gear')
-  const linkToFaUserGear = document.querySelector('.link-to-faUserGear')
   const closeBtn = document.getElementsByClassName("close")[0]
   const backgroundInput = document.querySelector('.background-input')
   const avatarInput = document.querySelector('.avatar-input')
+  const commentInput = document.querySelector('.comment-form input')
+  const commentButton = document.querySelector('.comment-form button')
+  const charCount = document.querySelector('.comment-form-container span')
 
-  faUserGear.onclick = function () {
-    modal.style.display = "block"
+  console.log(commentInput)
+  if (faUserGear) {
+    faUserGear.onclick = function () {
+      modal.style.display = "block"
+    }
   }
-
-  closeBtn.onclick = function () {
-    modal.style.display = "none"
+  if (closeBtn) {
+    closeBtn.onclick = function () {
+      modal.style.display = "none"
+    }
   }
-
   window.onclick = function (event) {
     if (event.target == modal) {
       modal.style.display = "none"
@@ -462,7 +485,22 @@
       document.querySelector('.avatar-img').src = URL.createObjectURL(avatarInput.files[0])
     }
   }
+  function commentControl(e) {
+    const MaxCharCount = 250
+    charCount.textContent = `${commentInput.value.length}`
+    if (commentInput.value.length > MaxCharCount) {
+      commentButton.disabled = true
+      commentButton.style.cursor = 'not-allowed'
+      document.querySelector('.comment-form-container p').style.color = '#d93b3b'
+    }
+    if (commentInput.value.length < MaxCharCount) {
+      commentButton.disabled = false
+      commentButton.style.cursor = 'pointer'
+      document.querySelector('.comment-form-container p').style.color = '#83898e'
+    }
+  }
+
   backgroundInput.addEventListener('change', changeImage)
   avatarInput.addEventListener('change', changeImage)
-  linkToFaUserGear.addEventListener('click', () => faUserGear.click())
+  commentInput.addEventListener('input', commentControl)
 </script>

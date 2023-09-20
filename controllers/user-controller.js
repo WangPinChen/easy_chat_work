@@ -1,7 +1,7 @@
 const bcrypt = require("bcryptjs")
 const multer = require('multer')
 const upload = multer({ dest: 'temp/' }).fields([{ name: 'avatar', maxCount: 1 }, { name: 'background', maxCount: 1 }])
-const { User } = require('../models')
+const { User, Comment } = require('../models')
 const { imgurFileHandler } = require('../helpers/file-helpers')
 
 const userController = {
@@ -10,10 +10,10 @@ const userController = {
   },
   login: (req, res) => {
     req.flash('success_msg', '登入成功。')
-    res.redirect(`/${req.user.id}`)
+    res.redirect(`/user/${req.user.id}`)
   },
   logout: (req, res) => {
-    req.logout
+    req.logout()
     req.flash('success_msg', '登出成功。')
     res.redirect('/login')
   },
@@ -61,7 +61,13 @@ const userController = {
     return res.redirect('/login')
   },
   getHomePage: async (req, res) => {
-    const user = req.user
+    const user = await User.findOne({
+      where: { id: req.params.userId },
+      raw: true
+    })
+    if (user.id === req.user.id) {
+      user.isUserSelf = true
+    }
     res.render('home', { user })
   },
   putUser: (req, res) => {
@@ -89,6 +95,32 @@ const userController = {
 
       return res.redirect('back')
     })
+  },
+  postComment: async (req, res) => {
+    const commenterId = req.user.id
+    const recipientId = req.params.userId
+    if (commenterId === recipientId) {
+      req.flash('warning_msg', '不可對自己留言')
+      req.redirect('back')
+    }
+    const commenter = await User.findOne({ where: { id: commenterId } })
+    const recipient = await User.findOne({ where: { id: recipientId } })
+    if (!commenter) {
+      req.flash('warning_msg', '留言者不存在')
+      req.redirect('back')
+    }
+    if (!recipient) {
+      req.flash('warning_msg', '留言對象不存在')
+      req.redirect('back')
+    }
+
+    await Comment.create({
+      comment: req.body.comment,
+      commenterId,
+      recipientId
+    })
+    req.flash('success_msg', '留言成功')
+    res.redirect('back')
   }
 
 }
