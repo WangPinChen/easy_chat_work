@@ -65,6 +65,10 @@ const userController = {
       where: { id: req.params.userId },
       raw: true
     })
+    if (user === null) {
+      req.flash('warning_msg', '使用者不存在')
+      return res.redirect('/')
+    }
     if (user.id === req.user.id) {
       user.isUserSelf = true
     }
@@ -72,18 +76,17 @@ const userController = {
   },
   putUser: (req, res) => {
     upload(req, res, async () => {
-      console.log(req.files)
       let backgroundPath = ''
       let avatarPath = ''
+      console.log(req.files)
       if (Object.keys(req.files).length !== 0) {
-        const backgroundFile = req.files.background[0]
-        const avatarFile = req.files.avatar[0]
-        console.log(backgroundFile, avatarFile)
-        backgroundPath = await imgurFileHandler(backgroundFile)
-        avatarPath = await imgurFileHandler(avatarFile)
+        if (req.files.background) {
+          backgroundPath = await imgurFileHandler(req.files.background[0])
+        }
+        if (req.files.avatar) {
+          avatarPath = await imgurFileHandler(req.files.avatar[0])
+        }
       }
-
-      console.log(backgroundPath, avatarPath)
 
       const user = await User.findOne({ where: { id: req.user.id } })
       await user.update({

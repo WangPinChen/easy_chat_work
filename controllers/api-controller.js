@@ -1,6 +1,16 @@
+const { User, Comment } = require('../models')
+
 const apiController = {
-  getUser: async (req, res) => {
-    res.json(req.user)
+  getComment: async (req, res) => {
+    const user = await User.findOne({
+      where: { id: req.params.userId },
+      include: [Comment]
+    })
+    const comments = await Comment.findAll({
+      where: { recipientId: req.params.userId },
+      include: [User]
+    })
+    res.json({ status: 'success', comments })
   }
 }
 

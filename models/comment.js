@@ -1,6 +1,15 @@
 'use strict';
+const {
+  Model
+} = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
-  const Comment = sequelize.define('Comment', {
+  class Comment extends Model {
+    static associate(models) {
+      Comment.belongsTo(models.User, { foreignKey: 'commenterId' })
+    }
+  }
+
+  Comment.init({
     comment: DataTypes.TEXT,
     commenterId: DataTypes.INTEGER,
     recipientId: DataTypes.INTEGER
@@ -9,9 +18,6 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'Comment',
     tableName: 'Comments',
     underscored: true
-  });
-  Comment.associate = function (models) {
-    // associations can be defined here
-  };
+  })
   return Comment;
-};
+}

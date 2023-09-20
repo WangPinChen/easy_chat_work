@@ -347,44 +347,15 @@
       </div>
       {{/if}}
       <div class="card-group">
-        <div class="card">
-          <img src="https://i.imgur.com/StpIHea.png" alt="">
-          <div class="nameComment">
-            <a href="">name</a>
-            <p class="comment">commentcommentcommentcommentcommentcomment</p>
-          </div>
-        </div>
-        <div class="card">
-          <img src="https://i.imgur.com/StpIHea.png" alt="">
-          <div class="nameComment">
-            <a href="">name</a>
-            <p class="comment">commentcommentcommentcommentcommentcomment</p>
-          </div>
-        </div>
-        <div class="card">
-          <img src="https://i.imgur.com/StpIHea.png" alt="">
-          <div class="nameComment">
-            <a href="">name</a>
-            <p class="comment">commentcommentcommentcommentcommentcomment</p>
-          </div>
-        </div>
-        <div class="card">
-          <img src="https://i.imgur.com/StpIHea.png" alt="">
-          <div class="nameComment">
-            <a href="">name</a>
-            <p class="comment">commentcommentcommentcommentcommentcomment</p>
-          </div>
 
-        </div>
-
-        <div class="card">
+        {{!-- render sample --}}
+        {{!-- <div class="card">
           <img src="https://i.imgur.com/StpIHea.png" alt="">
           <div class="nameComment">
             <a href="">name</a>
             <p class="comment">commentcommentcommentcommentcommentcomment</p>
           </div>
-
-        </div>
+        </div> --}}
 
       </div>
     </section>
@@ -447,8 +418,30 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 <script>
-  axios.get('/api/user')
-    .then(res => console.log(res.data))
+  const userId = window.location.href.match(/\/user\/(.+)/)?.[1]
+
+  axios.get(`/api/user/${userId}/comment`)
+    .then(res => {
+      console.log(res.data)
+      const cardGroup = document.querySelector('.card-group')
+      const comments = res.data.comments
+      comments.forEach(comment => {
+        const card = document.createElement('div')
+        if (!comment.User.avatar) {
+          comment.User.avatar = 'https://i.imgur.com/FUerPDO.png'
+        }
+        card.className = 'card'
+        card.innerHTML = `
+          <img src="${comment.User.avatar}" alt="">
+          <div class="nameComment">
+            <a href="/user/${comment.User.id}">${comment.User.name}</a>
+            <p class="comment">${comment.comment}</p>
+          </div>
+        `
+        cardGroup.appendChild(card)
+      })
+    })
+
 
   const modal = document.getElementById("myModal")
   const faUserGear = document.querySelector('.fa-user-gear')
@@ -456,10 +449,7 @@
   const backgroundInput = document.querySelector('.background-input')
   const avatarInput = document.querySelector('.avatar-input')
   const commentInput = document.querySelector('.comment-form input')
-  const commentButton = document.querySelector('.comment-form button')
-  const charCount = document.querySelector('.comment-form-container span')
 
-  console.log(commentInput)
   if (faUserGear) {
     faUserGear.onclick = function () {
       modal.style.display = "block"
@@ -486,6 +476,8 @@
     }
   }
   function commentControl(e) {
+    const commentButton = document.querySelector('.comment-form button')
+    const charCount = document.querySelector('.comment-form-container span')
     const MaxCharCount = 250
     charCount.textContent = `${commentInput.value.length}`
     if (commentInput.value.length > MaxCharCount) {
@@ -493,7 +485,7 @@
       commentButton.style.cursor = 'not-allowed'
       document.querySelector('.comment-form-container p').style.color = '#d93b3b'
     }
-    if (commentInput.value.length < MaxCharCount) {
+    if (commentInput.value.length <= MaxCharCount) {
       commentButton.disabled = false
       commentButton.style.cursor = 'pointer'
       document.querySelector('.comment-form-container p').style.color = '#83898e'
