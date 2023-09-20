@@ -1,4 +1,5 @@
 const { User, Comment } = require('../models')
+const { Sequelize } = require('sequelize')
 
 const apiController = {
   getComment: async (req, res) => {
@@ -11,6 +12,17 @@ const apiController = {
       include: [User]
     })
     res.json({ status: 'success', comments })
+  },
+  getExploreUser: async (req, res) => {
+    const currentUserId = req.user.id
+    const users = User.findAll({
+      where: {
+        id: {
+          [Sequelize.Op.ne]: currentUserId
+        }
+      }
+    })
+    res.json({ status: 'success', users })
   }
 }
 
