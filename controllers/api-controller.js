@@ -15,7 +15,8 @@ const apiController = {
   },
   getExploreUser: async (req, res) => {
     const currentUserId = req.user.id
-    const users = User.findAll({
+    console.log(req.user.id)
+    const users = await User.findAll({
       where: {
         id: {
           [Sequelize.Op.ne]: currentUserId

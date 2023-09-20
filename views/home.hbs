@@ -422,7 +422,6 @@
 
   axios.get(`/api/user/${userId}/comment`)
     .then(res => {
-      console.log(res.data)
       const cardGroup = document.querySelector('.card-group')
       const comments = res.data.comments
       comments.forEach(comment => {
