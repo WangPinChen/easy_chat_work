@@ -1,7 +1,6 @@
 {
   "name": "easy_chat",
   "version": "1.0.0",
-  "description": "",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -29,5 +28,7 @@
     "sequelize-cli": "^5.5.0",
     "socket.io": "^4.7.2",
     "sweetalert2": "^11.7.28"
-  }
+  },
+  "devDependencies": {},
+  "description": ""
 }
