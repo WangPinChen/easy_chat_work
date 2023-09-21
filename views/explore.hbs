@@ -74,6 +74,16 @@
     color: #83898e;
   }
 
+  .loader {
+    width: 100%;
+    margin: 0 auto;
+    font-size: 1.25rem;
+    color: #83898e;
+    background-color: rgb(1, 143, 253, 0.6);
+    padding: 1.25rem 0;
+    text-align: center;
+  }
+
   @media screen and (max-width:1280px) {
     main {
       margin-left: 140px;
@@ -149,18 +159,28 @@
         </div>
       </div> --}}
     </div>
+    {{!-- loader --}}
+    <div class="loader" id="loader" style="display: none;">Loading...</div>
   </main>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-  axios.get('/api/explore')
-    .then(res => {
-      const users = res.data.users
+  const loader = document.querySelector('.loader')
+  let page = 1
+  let loading = false; // 添加 loading 标志
 
-      users.forEach(user => {
-        const card = document.createElement('div')
-        card.className = 'card'
-        card.innerHTML = ` 
+  async function loadUsers() {
+    if (loading) return; // 如果正在加载数据，则不执行新的请求
+    loading = true; // 设置 loading 为 true
+    loader.style.display = 'block'
+    try {
+      const res = await axios.get(`/api/explore?page=${page}`)
+      const users = res.data.users
+      if (users.length > 0) {
+        users.forEach(user => {
+          const card = document.createElement('div')
+          card.classList = 'card'
+          card.innerHTML = `
             <div class="background-container">
               <img src="${user.background}" alt="">
             </div>
@@ -178,8 +198,29 @@
               </div>
               <a href="/user/${user.id}" class="name">${user.name}</a>
             </div>
-        `
-        document.querySelector('.card-group').appendChild(card)
-      })
-    })
+          `
+          document.querySelector('.card-group').appendChild(card)
+        })
+        page += 1
+        loader.style.display = 'none'
+      }
+      if (users.length === 0) {
+        loader.innerText = 'No more '
+      }
+      loading = false
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  window.addEventListener('scroll', () => {
+    //window.innerHeight 表示用戶可看到的高度
+    //window.scrollY 表示scroll bar到頁面頂部的位置
+    //document.body.offsetHeight 表示整個網頁頁面高度
+    if ((window.innerHeight + window.scrollY) * 1.25 >= document.body.offsetHeight) {
+      loadUsers();
+    }
+  });
+
+  loadUsers()
 </script>

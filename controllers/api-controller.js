@@ -14,14 +14,17 @@ const apiController = {
     res.json({ status: 'success', comments })
   },
   getExploreUser: async (req, res) => {
+    const page = req.query.page || 1
+    const limit = 16
     const currentUserId = req.user.id
-    console.log(req.user.id)
     const users = await User.findAll({
       where: {
         id: {
           [Sequelize.Op.ne]: currentUserId
         }
-      }
+      },
+      offset: (page - 1) * limit,
+      limit,
     })
     res.json({ status: 'success', users })
   }
