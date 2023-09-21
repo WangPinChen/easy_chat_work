@@ -49,7 +49,7 @@ const userController = {
     if (user) {
       errors.isAccountError = true
       errors.accountMsg = '此帳號已被註冊'
-      return res.render(name, account, password, passwordCheck, errors)
+      return res.render('register', { name, account, password, passwordCheck, errors })
     }
 
     const hash = await bcrypt.hash(password, 10)
