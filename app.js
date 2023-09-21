@@ -39,4 +39,8 @@ app.use((req, res, next) => {
 })
 app.use(routes)
 
+io.on('connection', (socket) => {
+  console.log('user connected')
+})
+
 server.listen(port, () => console.log(`Example app listening on port ${port}!`))

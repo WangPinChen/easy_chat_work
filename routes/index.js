@@ -21,6 +21,8 @@ router.post('/register', userController.register)
 
 router.get('/explore', userController.getExplorePage)
 
+router.get('/message', userController.getPublicMessage)
+
 router.get('/', (req, res) => {
   res.redirect(`/user/${req.user.id}`)
 })

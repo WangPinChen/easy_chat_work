@@ -127,6 +127,9 @@ const userController = {
   },
   getExplorePage: async (req, res) => {
     res.render('explore')
+  },
+  getPublicMessage: async (req, res) => {
+    res.render('message')
   }
 
 }
