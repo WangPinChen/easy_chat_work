@@ -1,1 +1,449 @@
-<h1>message page</h1>
+<style>
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  .title-container {
+    padding: 0.5rem;
+    border-bottom: 1px solid #cfdae3;
+    width: 100%;
+  }
+
+  .body-container {
+    display: flex;
+  }
+
+  main {
+    display: flex;
+    width: 100%;
+    margin-left: 160px;
+    border-left: 1px solid #cfdae3;
+    border-right: 1px solid #cfdae3;
+  }
+
+  .online-user-container {
+    width: 30%;
+    border-right: 1px solid #cfdae3;
+    max-width: 300px;
+    height: 100vh;
+    overflow-y: auto;
+  }
+
+  .online-user-container .card {
+    width: 100%;
+    display: flex;
+    padding: 0.5rem 0;
+    border-bottom: 4px solid #018ffd;
+  }
+
+  .online-user-container .avatar-container {
+    width: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .online-user-container .avatar-container img {
+    width: 90%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border-radius: 15px;
+  }
+
+  .online-user-container .name-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .online-user-container .name-container .name {
+    font-size: 1.25rem;
+    color: black;
+  }
+
+  .online-user-container .name-container .account {
+    color: #83898e;
+  }
+
+  .chat-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .chat-container .chat-message-group {
+    flex: 1;
+    overflow-y: scroll;
+  }
+
+  .chat-container .chat-message-left,
+  .chat-container .chat-message-right {
+    width: 100%;
+  }
+
+  .chat-container .chat-message-left {
+    display: flex;
+    align-items: start;
+  }
+
+  .chat-container .chat-message-left .avatar-container {
+    width: 8%;
+    aspect-ratio: 1/1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(to bottom right, #018ffd, white);
+    border-radius: 15%;
+    margin: 0.125rem;
+  }
+
+  .chat-container .chat-message-left .avatar-container img {
+    width: 90%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border-radius: 15%;
+    border: 2px solid white;
+  }
+
+  .chat-container .chat-message-left .messages {
+    max-width: 40%;
+  }
+
+  .chat-container .chat-message-left .nameMessage {
+    margin-top: 0.75rem;
+    margin-left: 0.5rem;
+    background-color: rgb(1, 143, 253, 0.3);
+    padding: 0 1rem 0.5rem 1rem;
+    border-radius: 0 15px 15px 15px;
+  }
+
+  .chat-container .chat-message-left .name {
+    overflow-wrap: break-word;
+    font-size: 1.2rem;
+    color: white;
+  }
+
+  .chat-container .chat-message-left .message {
+    overflow-wrap: break-word;
+  }
+
+  .chat-container .chat-message-right {
+    display: flex;
+    justify-content: end;
+  }
+
+  .chat-container .chat-message-right .messages {
+    max-width: 40%;
+  }
+
+  .chat-container .chat-message-right .message {
+    margin-top: 0.75rem;
+    margin-right: 0.5rem;
+    background-color: rgb(1, 143, 253, 0.3);
+    border-radius: 15px 15px 0 15px;
+    padding: 0.5rem 1rem;
+  }
+
+  .input-container {
+    border-top: 1px solid #cfdae3;
+    width: 100%;
+    padding: 1rem;
+  }
+
+  .input-container textarea {
+    width: 100%;
+    font-size: 1.25rem;
+    resize: none;
+  }
+</style>
+
+<div class="body-container">
+  {{> sidebar}}
+  <main>
+
+    <div class="online-user-container">
+
+      <div class="title-container">
+        <h1>在線使用者</h1>
+      </div>
+
+      <div class="card-group">
+
+        <div class="card">
+          <div class="avatar-container">
+            <img class="avatar" src="https://i.imgur.com/dfAzTMJ.jpg" alt="">
+          </div>
+          <div class="name-container">
+            <a href="" class="name">user.name</a>
+            <p class="account">@user.account</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="avatar-container">
+            <img class="avatar" src="https://i.imgur.com/dfAzTMJ.jpg" alt="">
+          </div>
+          <div class="name-container">
+            <a href="" class="name">user.name</a>
+            <p class="account">@user.account</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="avatar-container">
+            <img class="avatar" src="https://i.imgur.com/dfAzTMJ.jpg" alt="">
+          </div>
+          <div class="name-container">
+            <a href="" class="name">user.name</a>
+            <p class="account">@user.account</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="avatar-container">
+            <img class="avatar" src="https://i.imgur.com/dfAzTMJ.jpg" alt="">
+          </div>
+          <div class="name-container">
+            <a href="" class="name">user.name</a>
+            <p class="account">@user.account</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="avatar-container">
+            <img class="avatar" src="https://i.imgur.com/dfAzTMJ.jpg" alt="">
+          </div>
+          <div class="name-container">
+            <a href="" class="name">user.name</a>
+            <p class="account">@user.account</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="avatar-container">
+            <img class="avatar" src="https://i.imgur.com/dfAzTMJ.jpg" alt="">
+          </div>
+          <div class="name-container">
+            <a href="" class="name">user.name</a>
+            <p class="account">@user.account</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="avatar-container">
+            <img class="avatar" src="https://i.imgur.com/dfAzTMJ.jpg" alt="">
+          </div>
+          <div class="name-container">
+            <a href="" class="name">user.name</a>
+            <p class="account">@user.account</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="avatar-container">
+            <img class="avatar" src="https://i.imgur.com/dfAzTMJ.jpg" alt="">
+          </div>
+          <div class="name-container">
+            <a href="" class="name">user.name</a>
+            <p class="account">@user.account</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="avatar-container">
+            <img class="avatar" src="https://i.imgur.com/dfAzTMJ.jpg" alt="">
+          </div>
+          <div class="name-container">
+            <a href="" class="name">user.name</a>
+            <p class="account">@user.account</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="avatar-container">
+            <img class="avatar" src="https://i.imgur.com/dfAzTMJ.jpg" alt="">
+          </div>
+          <div class="name-container">
+            <a href="" class="name">user.name</a>
+            <p class="account">@user.account</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="avatar-container">
+            <img class="avatar" src="https://i.imgur.com/dfAzTMJ.jpg" alt="">
+          </div>
+          <div class="name-container">
+            <a href="" class="name">user.name</a>
+            <p class="account">@user.account</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="avatar-container">
+            <img class="avatar" src="https://i.imgur.com/dfAzTMJ.jpg" alt="">
+          </div>
+          <div class="name-container">
+            <a href="" class="name">user.name</a>
+            <p class="account">@user.account</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="chat-container">
+      <div class="title-container">
+        <h1>公開聊天室</h1>
+      </div>
+
+      <div class="chat-message-group">
+
+        <div class="chat-message-left">
+          <div class="avatar-container">
+            <img src="https://i.imgur.com/o1a4kLI.png" alt="">
+          </div>
+          <div class="messages">
+            <div class="nameMessage">
+              <div class="name">
+                user.name :
+              </div>
+              <div class="message">
+                hello~
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-message-left">
+          <div class="avatar-container">
+            <img src="https://i.imgur.com/o1a4kLI.png" alt="">
+          </div>
+          <div class="messages">
+            <div class="nameMessage">
+              <div class="name">
+                user.name :
+              </div>
+              <div class="message">
+                hello~hello~hello~hello~hello~hello~hello~hello~hello~hello~hello~hello~hello~hello~hello~hello~hello~hello~hello~hello~hello~hello~hello~hello~hello~hello~hello~hello~
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-message-left">
+          <div class="avatar-container">
+            <img src="https://i.imgur.com/o1a4kLI.png" alt="">
+          </div>
+          <div class="messages">
+            <div class="nameMessage">
+              <div class="name">
+                user.name :
+              </div>
+              <div class="message">
+                hello~
+              </div>
+            </div>
+            <div class="nameMessage">
+              <div class="name">
+                user.name :
+              </div>
+              <div class="message">
+                hello~
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+        <div class="chat-message-right">
+          <div class="messages">
+            <div class="message">
+              你好
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-message-right">
+          <div class="messages">
+            <div class="message">
+              你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-message-left">
+          <div class="avatar-container">
+            <img src="https://i.imgur.com/o1a4kLI.png" alt="">
+          </div>
+          <div class="messages">
+            <div class="nameMessage">
+              <div class="name">
+                user.name :
+              </div>
+              <div class="message">
+                hello~
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-message-left">
+          <div class="avatar-container">
+            <img src="https://i.imgur.com/o1a4kLI.png" alt="">
+          </div>
+          <div class="messages">
+            <div class="nameMessage">
+              <div class="name">
+                user.name :
+              </div>
+              <div class="message">
+                hello~
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-message-left">
+          <div class="avatar-container">
+            <img src="https://i.imgur.com/o1a4kLI.png" alt="">
+          </div>
+          <div class="messages">
+            <div class="nameMessage">
+              <div class="name">
+                user.name :
+              </div>
+              <div class="message">
+                hello~
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-message-left">
+          <div class="avatar-container">
+            <img src="https://i.imgur.com/o1a4kLI.png" alt="">
+          </div>
+          <div class="messages">
+            <div class="nameMessage">
+              <div class="name">
+                user.name :
+              </div>
+              <div class="message">
+                hello~
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div class="input-container">
+        <textarea rows="1"></textarea>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+<script>
+  const socket = io();
+
+</script>

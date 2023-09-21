@@ -40,7 +40,10 @@ app.use((req, res, next) => {
 app.use(routes)
 
 io.on('connection', (socket) => {
-  console.log('user connected')
+  console.log('a user connected')
+  socket.on('disconnect', () => {
+    console.log('user disconnected')
+  })
 })
 
 server.listen(port, () => console.log(`Example app listening on port ${port}!`))
