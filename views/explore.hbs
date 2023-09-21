@@ -79,15 +79,11 @@
       margin-left: 140px;
     }
 
-    .card .nameAvatar a {
-
-      font-size: 1rem;
+    .card-group .card {
+      width: 33%;
     }
 
-    .card .name {
-      font-size: 1rem;
 
-    }
   }
 
   @media screen and (max-width:768px) {
@@ -97,7 +93,35 @@
     }
 
     .card-group .card {
-      width: 33%;
+      width: 50%;
+    }
+
+    .card .background-container {
+      display: none;
+    }
+
+    .card .card-bottom {
+      position: static;
+    }
+
+    .card .nameAvatar .avatar-container {
+      width: 100%;
+    }
+
+    .card .nameAvatar .chat-link {
+      position: absolute;
+      top: 5%;
+      right: 5%;
+      font-size: 1.25rem;
+      background-color: rgb(255, 255, 255, 0.7);
+      padding: 0 0.5rem;
+      border-radius: 3px;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3)
+    }
+
+    .card .name {
+      font-size: 1.25rem;
+      word-wrap: break-word;
     }
   }
 </style>
@@ -143,9 +167,11 @@
             <div class="card-bottom">
               <div class="nameAvatar">
                 <div class="avatar-container">
-                  <img src="${user.avatar}" alt="">
+                  <a href="/user/${user.id}">
+                    <img src="${user.avatar}" alt="">
+                  </a>
                 </div>
-                <a href="">
+                <a class='chat-link' href="">
                   <i class="fa-solid fa-message"></i>
                   聊聊
                 </a>
