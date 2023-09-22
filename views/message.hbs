@@ -140,6 +140,7 @@
 
   .chat-container .chat-message-left .messages {
     max-width: 40%;
+    overflow-wrap: break-word;
   }
 
   .chat-container .chat-message-left .nameMessage {
@@ -154,10 +155,6 @@
     overflow-wrap: break-word;
     font-size: 1.2rem;
     color: white;
-  }
-
-  .chat-container .chat-message-left .message {
-    overflow-wrap: break-word;
   }
 
   .chat-container .chat-message-right {
@@ -246,7 +243,6 @@
 <div class="body-container">
   {{> sidebar}}
   <main>
-
     <div class="online-user-container">
       <div class="title-container">
         <h1>在線使用者</h1>

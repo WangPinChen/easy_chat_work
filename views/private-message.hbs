@@ -1,1 +1,270 @@
-<h1>private message page</h1>
+<style>
+  a {
+    color: black;
+  }
+
+  a:hover {
+    color: black;
+  }
+
+  .body-container {
+    display: flex;
+  }
+
+  main {
+    display: flex;
+    width: 100%;
+    margin-left: 160px;
+    border-left: 1px solid #cfdae3;
+    border-right: 1px solid #cfdae3;
+  }
+
+  .user-container {
+    width: 20%;
+    border-right: 1px solid #cfdae3;
+    height: 100vh;
+    overflow-y: auto;
+  }
+
+  .user-container .card-group {
+    width: 100%;
+  }
+
+  .user-container .card-group .card {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding-bottom: 0.2rem;
+    border-bottom: 1px solid #cfdae3;
+  }
+
+  .user-container .card-group .card:hover {
+    background-color: rgb(0, 0, 0, 0.015);
+  }
+
+  .user-container .card-group .card .avatar-container {
+    width: 30%;
+    max-width: 85px;
+    aspect-ratio: 1/1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+    background: linear-gradient(to bottom right, #018ffd, white);
+    margin: 0 0.2rem;
+  }
+
+  .user-container .card-group .card .avatar-container img {
+    width: 90%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border-radius: 15px;
+    border: 2px solid white;
+  }
+
+  .user-container .card-group .card .nameAccount {
+    width: 70%;
+    white-space: nowrap;
+    overflow: hidden;
+    margin-right: 0.2rem;
+  }
+
+  .user-container .card-group .card .nameAccount .name {
+    font-size: 1.25rem;
+  }
+
+  .user-container .card-group .card .nameAccount .account {
+    font-size: 1rem;
+    color: #83898e;
+  }
+
+  .chat-contaier {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .chat-contaier .chat-title {
+    border-bottom: 1px solid #cfdae3;
+    display: flex;
+    align-items: center;
+    padding: 0.2rem 2rem;
+  }
+
+  .chat-contaier .chat-title .avatar-container {
+    width: 5%;
+    aspect-ratio: 1/1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+    background: linear-gradient(to bottom right, #018ffd, white);
+    margin: 0 0.2rem;
+  }
+
+  .chat-contaier .chat-title .avatar-container img {
+    width: 90%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border-radius: 15px;
+    border: 2px solid white;
+  }
+
+  .chat-contaier .chat-title .name {
+    font-size: 1.5rem;
+  }
+
+  .chat-contaier .message-group {
+    width: 100%;
+    flex: 1;
+    overflow-y: scroll;
+    padding: 0.25rem 0;
+  }
+
+  .chat-contaier .message-group .chat-message-left,
+  .chat-contaier .message-group .chat-message-right,
+  .chat-contaier .message-group .system-message {
+    width: 100%;
+  }
+
+  .chat-contaier .message-group .chat-message-left .message,
+  .chat-contaier .message-group .chat-message-right .message,
+  .chat-contaier .message-group .system-message .message {
+    max-width: 40%;
+    overflow-wrap: break-word;
+    margin-top: 0.75rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+  }
+
+  .chat-contaier .message-group .system-message {
+    margin: 0.25rem auto;
+    display: flex;
+    justify-content: center;
+  }
+
+  .chat-contaier .message-group .chat-message-left {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .chat-contaier .message-group .chat-message-left .avatar-container {
+    width: 55px;
+    aspect-ratio: 1/1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(to bottom right, #018ffd, white);
+    border-radius: 15%;
+    margin: 0.125rem;
+  }
+
+  .chat-contaier .message-group .chat-message-left .avatar-container img {
+    width: 90%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border-radius: 15%;
+    border: 2px solid white;
+  }
+
+  .chat-contaier .message-group .chat-message-left .message {
+    background-color: rgb(1, 143, 253, 0.3);
+    padding: 0 1rem 0.5rem 1rem;
+    border-radius: 0 15px 15px 15px;
+  }
+
+  .chat-contaier .message-group .chat-message-right {
+    display: flex;
+    justify-content: end;
+  }
+
+  .chat-contaier .message-group .chat-message-right .message {
+    background-color: rgb(1, 143, 253, 0.3);
+    padding: 0 1rem 0.5rem 1rem;
+    border-radius: 15px 0 15px 15px;
+  }
+
+  .input-container {
+    border-top: 1px solid #cfdae3;
+    width: 100%;
+    padding: 1rem;
+  }
+
+  .input-container textarea {
+    width: 100%;
+    font-size: 1.25rem;
+    resize: none;
+  }
+</style>
+
+<div class="body-container">
+  {{> sidebar}}
+  <main>
+    <div class="user-container">
+      <div class="card-group">
+        <a href="/user/id" class="card">
+          <div class="avatar-container">
+            <img src="https://i.imgur.com/slA9fWY.jpeg" alt="">
+          </div>
+          <div class="nameAccount">
+            <p class="name">超級中二猴</p>
+            <p class="account">@super_center_two_monkey_5566556</p>
+          </div>
+        </a>
+        <a href="/user/id" class="card">
+          <div class="avatar-container">
+            <img src="https://i.imgur.com/slA9fWY.jpeg" alt="">
+          </div>
+          <div class="nameAccount">
+            <p class="name">超級中二猴</p>
+            <p class="account">@super_center_two_monkey_5566556</p>
+          </div>
+        </a>
+        <a href="/user/id" class="card">
+          <div class="avatar-container">
+            <img src="https://i.imgur.com/slA9fWY.jpeg" alt="">
+          </div>
+          <div class="nameAccount">
+            <p class="name">超級中二猴</p>
+            <p class="account">@super_center_two_monkey_5566556</p>
+          </div>
+        </a>
+
+      </div>
+    </div>
+    <div class="chat-contaier">
+      <div class="chat-title">
+        <div class="avatar-container">
+          <img src="https://i.imgur.com/slA9fWY.jpeg" alt="">
+        </div>
+        <p class="name">劍女人</p>
+      </div>
+      <div class="message-group">
+
+        <div class="chat-message-left user-id-">
+          <div class="avatar-container">
+            <img src="https://i.imgur.com/2f3gHqv.jpeg" alt="">
+          </div>
+          <div class="message">
+            hello~
+          </div>
+        </div>
+
+        <div class="chat-message-right user-id-">
+          <div class="message">
+            你好~
+          </div>
+        </div>
+
+        <div class="system-message">
+          <div class="message">
+            system_message
+          </div>
+        </div>
+      </div>
+      <div class="input-container">
+        <textarea rows="1"></textarea>
+      </div>
+    </div>
+  </main>
+</div>
