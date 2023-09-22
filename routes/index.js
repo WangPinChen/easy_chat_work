@@ -2,15 +2,16 @@ const express = require("express")
 const router = express.Router()
 const passport = require('../config/passport')
 const api = require('./modules/api')
+const authenticated = require('../middleware/auth')
 
 const userController = require('../controllers/user-controller')
 
 router.use('/api', api)
 
-router.put('/user/:userId', userController.putUser)
-router.get('/user/:userId', userController.getHomePage)
+router.put('/user/:userId', authenticated, userController.putUser)
+router.get('/user/:userId', authenticated, userController.getHomePage)
 
-router.post('/comment/:userId', userController.postComment)
+router.post('/comment/:userId', authenticated, userController.postComment)
 
 router.get('/login', userController.loginPage)
 router.post('/login', passport.authenticate("local", { failureRedirect: "/login", failureMessage: true }), userController.login)
@@ -19,11 +20,11 @@ router.post('/logout', userController.logout)
 router.get('/register', userController.registerPage)
 router.post('/register', userController.register)
 
-router.get('/explore', userController.getExplorePage)
+router.get('/explore', authenticated, userController.getExplorePage)
 
-router.get('/message', userController.getPublicMessage)
+router.get('/message', authenticated, userController.getPublicMessage)
 
-router.get('/', (req, res) => {
+router.get('/', authenticated, (req, res) => {
   res.redirect(`/user/${req.user.id}`)
 })
 
