@@ -39,21 +39,6 @@ app.use((req, res, next) => {
 })
 app.use(routes)
 
-io.on('connection', (socket) => {
-  console.log('a user connected')
-
-  socket.on('chat message', (msg) => {
-    io.emit('chat message', msg)
-  });
-
-  socket.on('disconnect', () => {
-    console.log('user disconnected')
-  })
-
-})
-
-
-
-
+require('./controllers/socket-controller')(io)
 
 server.listen(port, () => console.log(`Example app listening on port ${port}!`))

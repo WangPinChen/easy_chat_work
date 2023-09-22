@@ -164,124 +164,11 @@
   <main>
 
     <div class="online-user-container">
-
       <div class="title-container">
         <h1>在線使用者</h1>
       </div>
-
       <div class="card-group">
-
-        <div class="card">
-          <div class="avatar-container">
-            <img class="avatar" src="https://i.imgur.com/dfAzTMJ.jpg" alt="">
-          </div>
-          <div class="name-container">
-            <a href="" class="name">user.name</a>
-            <p class="account">@user.account</p>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="avatar-container">
-            <img class="avatar" src="https://i.imgur.com/dfAzTMJ.jpg" alt="">
-          </div>
-          <div class="name-container">
-            <a href="" class="name">user.name</a>
-            <p class="account">@user.account</p>
-          </div>
-        </div>
-        <div class="card">
-          <div class="avatar-container">
-            <img class="avatar" src="https://i.imgur.com/dfAzTMJ.jpg" alt="">
-          </div>
-          <div class="name-container">
-            <a href="" class="name">user.name</a>
-            <p class="account">@user.account</p>
-          </div>
-        </div>
-        <div class="card">
-          <div class="avatar-container">
-            <img class="avatar" src="https://i.imgur.com/dfAzTMJ.jpg" alt="">
-          </div>
-          <div class="name-container">
-            <a href="" class="name">user.name</a>
-            <p class="account">@user.account</p>
-          </div>
-        </div>
-        <div class="card">
-          <div class="avatar-container">
-            <img class="avatar" src="https://i.imgur.com/dfAzTMJ.jpg" alt="">
-          </div>
-          <div class="name-container">
-            <a href="" class="name">user.name</a>
-            <p class="account">@user.account</p>
-          </div>
-        </div>
-        <div class="card">
-          <div class="avatar-container">
-            <img class="avatar" src="https://i.imgur.com/dfAzTMJ.jpg" alt="">
-          </div>
-          <div class="name-container">
-            <a href="" class="name">user.name</a>
-            <p class="account">@user.account</p>
-          </div>
-        </div>
-        <div class="card">
-          <div class="avatar-container">
-            <img class="avatar" src="https://i.imgur.com/dfAzTMJ.jpg" alt="">
-          </div>
-          <div class="name-container">
-            <a href="" class="name">user.name</a>
-            <p class="account">@user.account</p>
-          </div>
-        </div>
-        <div class="card">
-          <div class="avatar-container">
-            <img class="avatar" src="https://i.imgur.com/dfAzTMJ.jpg" alt="">
-          </div>
-          <div class="name-container">
-            <a href="" class="name">user.name</a>
-            <p class="account">@user.account</p>
-          </div>
-        </div>
-        <div class="card">
-          <div class="avatar-container">
-            <img class="avatar" src="https://i.imgur.com/dfAzTMJ.jpg" alt="">
-          </div>
-          <div class="name-container">
-            <a href="" class="name">user.name</a>
-            <p class="account">@user.account</p>
-          </div>
-        </div>
-        <div class="card">
-          <div class="avatar-container">
-            <img class="avatar" src="https://i.imgur.com/dfAzTMJ.jpg" alt="">
-          </div>
-          <div class="name-container">
-            <a href="" class="name">user.name</a>
-            <p class="account">@user.account</p>
-          </div>
-        </div>
-        <div class="card">
-          <div class="avatar-container">
-            <img class="avatar" src="https://i.imgur.com/dfAzTMJ.jpg" alt="">
-          </div>
-          <div class="name-container">
-            <a href="" class="name">user.name</a>
-            <p class="account">@user.account</p>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="avatar-container">
-            <img class="avatar" src="https://i.imgur.com/dfAzTMJ.jpg" alt="">
-          </div>
-          <div class="name-container">
-            <a href="" class="name">user.name</a>
-            <p class="account">@user.account</p>
-          </div>
-        </div>
-
+        {{!-- 上線使用者產生處 --}}
       </div>
     </div>
 
@@ -308,21 +195,36 @@
     const currentUserRes = await axios.get('api/user')
     const currentUser = currentUserRes.data.user
 
-    console.log(currentUser)
-
+    //捲動scrollbar到最底部
     chatMessageGroup.scrollTop = chatMessageGroup.scrollHeight
+    socket.emit('online_user', currentUser)
 
+    socket.on('online_user', user => {
+      const cardGroup = document.querySelector('.card-group')
+      cardGroup.innerHTML += `
+        <div class="card">
+          <div class="avatar-container">
+            <img class="avatar" src="${user.avatar}" alt="">
+          </div>
+          <div class="name-container">
+            <a href="" class="name">${user.name}</a>
+            <p class="account">@${user.account}</p>
+          </div>
+        </div>
+      `
+    })
+    //公開聊天訊息發送至後端
     input.addEventListener('keyup', (e) => {
       if (e.key === 'Enter') {
-        socket.emit('chat message', {
+        socket.emit('public_message', {
           user: currentUser,
           message: input.value
         })
         input.value = ''
       }
     });
-
-    socket.on('chat message', (msgObj) => {
+    //接收後端公開聊天訊息
+    socket.on('public_message', (msgObj) => {
       //判斷訊息是否是自己，如果是自己產生chat-message-right
       if (msgObj.user.id === currentUser.id) {
         chatMessageGroup.innerHTML += `
@@ -337,8 +239,9 @@
         return chatMessageGroup.scrollTop = chatMessageGroup.scrollHeight
       }
       //判斷訊息發送者是否和上一個發送者相同，如果相同，訊息隱藏頭貼+姓名
-      if (chatMessageGroup.lastElementChild.classList.contains(`user-id-${msgObj.user.id}`)) {
-        chatMessageGroup.innerHTML += `
+      if (chatMessageGroup.lastElementChild) {
+        if (chatMessageGroup.lastElementChild.classList.contains(`user-id-${msgObj.user.id}`)) {
+          chatMessageGroup.innerHTML += `
         <div class="chat-message-left user-id-${msgObj.user.id}">
           <div class="avatar-container" style="visibility:hidden;height:0" >
             <img src="https://i.imgur.com/o1a4kLI.png" alt="">
@@ -355,7 +258,8 @@
           </div>
         </div>
          `
-        return chatMessageGroup.scrollTop = chatMessageGroup.scrollHeight
+          return chatMessageGroup.scrollTop = chatMessageGroup.scrollHeight
+        }
       }
       //如果訊息來自於別的使用者，產生chat-message-left
       chatMessageGroup.innerHTML += `
