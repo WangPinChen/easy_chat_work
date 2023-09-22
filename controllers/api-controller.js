@@ -2,6 +2,11 @@ const { User, Comment } = require('../models')
 const { Sequelize } = require('sequelize')
 
 const apiController = {
+  getCurrentUser: async (req, res) => {
+    const user = req.user
+    delete user.password
+    res.json({ status: 'success', user })
+  },
   getComment: async (req, res) => {
     const user = await User.findOne({
       where: { id: req.params.userId },

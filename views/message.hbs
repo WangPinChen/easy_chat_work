@@ -24,7 +24,6 @@
   .online-user-container {
     width: 30%;
     border-right: 1px solid #cfdae3;
-    max-width: 300px;
     height: 100vh;
     overflow-y: auto;
   }
@@ -76,6 +75,7 @@
   .chat-container .chat-message-group {
     flex: 1;
     overflow-y: scroll;
+    padding: 0.25rem 0;
   }
 
   .chat-container .chat-message-left,
@@ -89,7 +89,7 @@
   }
 
   .chat-container .chat-message-left .avatar-container {
-    width: 8%;
+    width: 55px;
     aspect-ratio: 1/1;
     display: flex;
     justify-content: center;
@@ -289,161 +289,94 @@
       <div class="title-container">
         <h1>公開聊天室</h1>
       </div>
-
       <div class="chat-message-group">
-
-        <div class="chat-message-left">
-          <div class="avatar-container">
-            <img src="https://i.imgur.com/o1a4kLI.png" alt="">
-          </div>
-          <div class="messages">
-            <div class="nameMessage">
-              <div class="name">
-                user.name :
-              </div>
-              <div class="message">
-                hello~
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="chat-message-left">
-          <div class="avatar-container">
-            <img src="https://i.imgur.com/o1a4kLI.png" alt="">
-          </div>
-          <div class="messages">
-            <div class="nameMessage">
-              <div class="name">
-                user.name :
-              </div>
-              <div class="message">
-                hello~hello~hello~hello~hello~hello~hello~hello~hello~hello~hello~hello~hello~hello~hello~hello~hello~hello~hello~hello~hello~hello~hello~hello~hello~hello~hello~hello~
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="chat-message-left">
-          <div class="avatar-container">
-            <img src="https://i.imgur.com/o1a4kLI.png" alt="">
-          </div>
-          <div class="messages">
-            <div class="nameMessage">
-              <div class="name">
-                user.name :
-              </div>
-              <div class="message">
-                hello~
-              </div>
-            </div>
-            <div class="nameMessage">
-              <div class="name">
-                user.name :
-              </div>
-              <div class="message">
-                hello~
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-
-
-        <div class="chat-message-right">
-          <div class="messages">
-            <div class="message">
-              你好
-            </div>
-          </div>
-        </div>
-
-        <div class="chat-message-right">
-          <div class="messages">
-            <div class="message">
-              你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好
-            </div>
-          </div>
-        </div>
-
-        <div class="chat-message-left">
-          <div class="avatar-container">
-            <img src="https://i.imgur.com/o1a4kLI.png" alt="">
-          </div>
-          <div class="messages">
-            <div class="nameMessage">
-              <div class="name">
-                user.name :
-              </div>
-              <div class="message">
-                hello~
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="chat-message-left">
-          <div class="avatar-container">
-            <img src="https://i.imgur.com/o1a4kLI.png" alt="">
-          </div>
-          <div class="messages">
-            <div class="nameMessage">
-              <div class="name">
-                user.name :
-              </div>
-              <div class="message">
-                hello~
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="chat-message-left">
-          <div class="avatar-container">
-            <img src="https://i.imgur.com/o1a4kLI.png" alt="">
-          </div>
-          <div class="messages">
-            <div class="nameMessage">
-              <div class="name">
-                user.name :
-              </div>
-              <div class="message">
-                hello~
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="chat-message-left">
-          <div class="avatar-container">
-            <img src="https://i.imgur.com/o1a4kLI.png" alt="">
-          </div>
-          <div class="messages">
-            <div class="nameMessage">
-              <div class="name">
-                user.name :
-              </div>
-              <div class="message">
-                hello~
-              </div>
-            </div>
-          </div>
-        </div>
-
-
+        {{!-- 訊息產生處 --}}
       </div>
-
       <div class="input-container">
         <textarea rows="1"></textarea>
       </div>
-
     </div>
 
   </main>
 </div>
 
 <script>
-  const socket = io();
+  (async () => {
+    const socket = io()
+    const input = document.querySelector('.input-container textarea')
+    const chatMessageGroup = document.querySelector('.chat-message-group')
+    const currentUserRes = await axios.get('api/user')
+    const currentUser = currentUserRes.data.user
 
+    console.log(currentUser)
+
+    chatMessageGroup.scrollTop = chatMessageGroup.scrollHeight
+
+    input.addEventListener('keyup', (e) => {
+      if (e.key === 'Enter') {
+        socket.emit('chat message', {
+          user: currentUser,
+          message: input.value
+        })
+        input.value = ''
+      }
+    });
+
+    socket.on('chat message', (msgObj) => {
+      //判斷訊息是否是自己，如果是自己產生chat-message-right
+      if (msgObj.user.id === currentUser.id) {
+        chatMessageGroup.innerHTML += `
+        <div class="chat-message-right">
+          <div class="messages">
+            <div class="message">
+              ${msgObj.message}
+            </div>
+          </div>
+        </div>
+        `
+        return chatMessageGroup.scrollTop = chatMessageGroup.scrollHeight
+      }
+      //判斷訊息發送者是否和上一個發送者相同，如果相同，訊息隱藏頭貼+姓名
+      if (chatMessageGroup.lastElementChild.classList.contains(`user-id-${msgObj.user.id}`)) {
+        chatMessageGroup.innerHTML += `
+        <div class="chat-message-left user-id-${msgObj.user.id}">
+          <div class="avatar-container" style="visibility:hidden;height:0" >
+            <img src="https://i.imgur.com/o1a4kLI.png" alt="">
+          </div>
+          <div class="messages">
+            <div class="nameMessage">
+              <div class="name" style="display:none;">
+                user.name :
+              </div>
+              <div class="message">
+                ${msgObj.message}
+              </div>
+            </div>
+          </div>
+        </div>
+         `
+        return chatMessageGroup.scrollTop = chatMessageGroup.scrollHeight
+      }
+      //如果訊息來自於別的使用者，產生chat-message-left
+      chatMessageGroup.innerHTML += `
+        <div class="chat-message-left user-id-${msgObj.user.id}">
+          <div class="avatar-container">
+            <img src="${msgObj.user.avatar}" alt="">
+          </div>
+          <div class="messages">
+            <div class="nameMessage">
+              <div class="name" >
+                ${msgObj.user.name}:
+              </div>
+              <div class="message">
+                ${msgObj.message}
+              </div>
+            </div>
+          </div>
+        </div>
+    `
+      //捲動scrollbar到最底部
+      chatMessageGroup.scrollTop = chatMessageGroup.scrollHeight
+    })
+  })()
 </script>
