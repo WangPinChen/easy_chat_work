@@ -22,6 +22,7 @@ router.post('/register', userController.register)
 
 router.get('/explore', authenticated, userController.getExplorePage)
 
+router.get('/message/:userId', authenticated, userController.getPrivateMessage)
 router.get('/message', authenticated, userController.getPublicMessage)
 
 router.get('/', authenticated, (req, res) => {

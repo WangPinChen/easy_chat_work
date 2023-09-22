@@ -135,6 +135,9 @@ const userController = {
     })
     console.log(onlineUsers)
     res.render('message', { onlineUsers })
+  },
+  getPrivateMessage: async (req, res) => {
+    res.render('private-message')
   }
 
 }
