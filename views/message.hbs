@@ -79,8 +79,19 @@
   }
 
   .chat-container .chat-message-left,
-  .chat-container .chat-message-right {
+  .chat-container .chat-message-right,
+  .chat-container .system_message {
     width: 100%;
+  }
+
+  .chat-container .system_message {
+    margin: 0.25rem auto;
+    display: flex;
+    justify-content: center;
+  }
+
+  .chat-container .system_message p {
+    display: inline;
   }
 
   .chat-container .chat-message-left {
@@ -169,6 +180,19 @@
       </div>
       <div class="card-group">
         {{!-- 上線使用者產生處 --}}
+
+        {{!-- 透過handlebars產生已上線者 --}}
+        {{#each onlineUsers}}
+        <div class="card user-id-{{this.id}}">
+          <div class="avatar-container">
+            <img class="avatar" src="{{this.avatar}}" alt="">
+          </div>
+          <div class="name-container">
+            <a href="" class="name">{{this.name}}</a>
+            <p class="account">@{{this.account}}</p>
+          </div>
+        </div>
+        {{/each}}
       </div>
     </div>
 
@@ -178,6 +202,11 @@
       </div>
       <div class="chat-message-group">
         {{!-- 訊息產生處 --}}
+
+        {{!-- render sample --}}
+        {{!-- <div class="system_message">
+          <p>system_message</p>
+        </div> --}}
       </div>
       <div class="input-container">
         <textarea rows="1"></textarea>
@@ -197,21 +226,40 @@
 
     //捲動scrollbar到最底部
     chatMessageGroup.scrollTop = chatMessageGroup.scrollHeight
-    socket.emit('online_user', currentUser)
-
-    socket.on('online_user', user => {
+    //告知後端伺服器使用者進入
+    socket.emit('online_user', {
+      type: 'join',
+      user: currentUser
+    })
+    //監聽來自後端伺服器發送使用者進入/離開
+    socket.on('online_user', msgObj => {
       const cardGroup = document.querySelector('.card-group')
-      cardGroup.innerHTML += `
-        <div class="card">
+      if (msgObj.type === 'join') {
+        cardGroup.innerHTML += `
+        <div class="card user-id-${msgObj.user.id}">
           <div class="avatar-container">
-            <img class="avatar" src="${user.avatar}" alt="">
+            <img class="avatar" src="${msgObj.user.avatar}" alt="">
           </div>
           <div class="name-container">
-            <a href="" class="name">${user.name}</a>
-            <p class="account">@${user.account}</p>
+            <a href="" class="name">${msgObj.user.name}</a>
+            <p class="account">@${msgObj.user.account}</p>
           </div>
         </div>
       `
+        chatMessageGroup.innerHTML += `
+       <div class="system_message type-user-joind">
+         <p>${msgObj.user.name} 已加入聊天室</p>
+       </div> 
+      `
+      }
+      if (msgObj.type === 'leave') {
+        document.querySelector(`.card.user-id-${msgObj.user.id}`).remove()
+        chatMessageGroup.innerHTML += `
+       <div class="system_message type-user-joind">
+         <p>${msgObj.user.name} 已離開聊天室</p>
+       </div> 
+      `
+      }
     })
     //公開聊天訊息發送至後端
     input.addEventListener('keyup', (e) => {
@@ -281,6 +329,13 @@
     `
       //捲動scrollbar到最底部
       chatMessageGroup.scrollTop = chatMessageGroup.scrollHeight
+    })
+    //監測使用者是否離開頁面
+    window.addEventListener('beforeunload', () => {
+      socket.emit('online_user', {
+        type: 'leave',
+        user: currentUser
+      })
     })
   })()
 </script>

@@ -129,7 +129,12 @@ const userController = {
     res.render('explore')
   },
   getPublicMessage: async (req, res) => {
-    res.render('message')
+    const onlineUsers = await User.findAll({
+      where: { isJoinPublicRoom: true },
+      raw: true
+    })
+    console.log(onlineUsers)
+    res.render('message', { onlineUsers })
   }
 
 }
