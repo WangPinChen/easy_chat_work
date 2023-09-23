@@ -9,6 +9,7 @@
 
   .body-container {
     display: flex;
+    max-width: 100vw;
   }
 
   main {
@@ -36,6 +37,7 @@
     align-items: center;
     padding-bottom: 0.2rem;
     border-bottom: 1px solid #cfdae3;
+    position: relative;
   }
 
   .user-container .card-group .card:hover {
@@ -78,10 +80,24 @@
     color: #83898e;
   }
 
+  .user-container .card-group .card .notify-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: red;
+    position: absolute;
+    text-align: center;
+    color: white;
+    top: 2%;
+    right: 2%;
+    font-size: 0.8rem;
+  }
+
   .chat-contaier {
     width: 80%;
     display: flex;
     flex-direction: column;
+    height: 100vh;
   }
 
   .chat-contaier .chat-title {
@@ -123,9 +139,7 @@
 
   .chat-contaier .message-group .chat-message-left,
   .chat-contaier .message-group .chat-message-right,
-  .chat-contaier .message-group .system-message {
-    width: 100%;
-  }
+  .chat-contaier .message-group .system-message {}
 
   .chat-contaier .message-group .chat-message-left .message,
   .chat-contaier .message-group .chat-message-right .message,
@@ -135,6 +149,7 @@
     margin-top: 0.75rem;
     margin-left: 0.5rem;
     margin-right: 0.5rem;
+    margin-bottom: 0.3rem;
   }
 
   .chat-contaier .message-group .system-message {
@@ -202,31 +217,19 @@
   <main>
     <div class="user-container">
       <div class="card-group">
-        <a href="/user/id" class="card">
+        {{!-- 產生card的地方 --}}
+
+        {{!-- render-sample↓ --}}
+        <a href="#" class="card user-id-xxxx">
           <div class="avatar-container">
-            <img src="https://i.imgur.com/slA9fWY.jpeg" alt="">
+            <img src="https://i.imgur.com/1IXoXSK.jpeg" alt="">
           </div>
           <div class="nameAccount">
-            <p class="name">超級中二猴</p>
-            <p class="account">@super_center_two_monkey_5566556</p>
+            <p class="name">cat</p>
+            <p class="account">@bad_cat</p>
           </div>
-        </a>
-        <a href="/user/id" class="card">
-          <div class="avatar-container">
-            <img src="https://i.imgur.com/slA9fWY.jpeg" alt="">
-          </div>
-          <div class="nameAccount">
-            <p class="name">超級中二猴</p>
-            <p class="account">@super_center_two_monkey_5566556</p>
-          </div>
-        </a>
-        <a href="/user/id" class="card">
-          <div class="avatar-container">
-            <img src="https://i.imgur.com/slA9fWY.jpeg" alt="">
-          </div>
-          <div class="nameAccount">
-            <p class="name">超級中二猴</p>
-            <p class="account">@super_center_two_monkey_5566556</p>
+          <div class="notify-icon">
+            3
           </div>
         </a>
 
@@ -268,3 +271,114 @@
     </div>
   </main>
 </div>
+
+<script>
+  (async () => {
+    const socket = io()
+    const currentUserRes = await axios.get('/api/user')
+    const currentUser = currentUserRes.data.user
+    const recipientId = window.location.href.split('/')[window.location.href.split('/').length - 1]
+    const cardGroup = document.querySelector('.card-group')
+
+    console.log(recipientId)
+    //監聽是否有自己的訊息，並且產生user-card
+    function createUserCard(obj) {
+      const card = document.createElement('a')
+      card.classList.add('card', `user-id-${obj.id}`)
+      card.href = `/message/private/${obj.id}`
+      card.innerHTML = `
+        <div class="avatar-container">
+          <img src="${obj.avatar}" alt="">
+        </div>
+        <div class="nameAccount">
+          <p class="name">${obj.name}</p>
+          <p class="account">@${obj.account}</p>
+        </div>
+        <div class="notify-icon">
+          1
+        </div>   
+      `
+      if (cardGroup.firstChild) {
+        cardGroup.insertBefore(card, cardGroup.firstChild)
+      } else {
+        cardGroup.appendChild(card)
+      }
+    }
+    socket.on(`${currentUser.id}`, msgObj => {
+      if (!cardGroup.querySelector(`.user-id-${msgObj.sender.id}`)) {
+        createUserCard(msgObj.sender)
+
+      } else if (cardGroup.querySelector(`.user-id-${msgObj.sender.id}`)) {
+        const card = cardGroup.querySelector(`.user-id-${msgObj.sender.id}`)
+        let unreadMsgCount = Number(card.querySelector('.notify-icon').innerText)
+        unreadMsgCount += 1
+        card.querySelector('.notify-icon').innerText = unreadMsgCount
+      }
+    })
+    //如果路由有id確定進入聊天室窗
+    if (recipientId && recipientId !== 'private') {
+      const recipientRes = await axios.get(`/api/user/${recipientId}`)
+      const recipient = recipientRes.data.user
+      //產生聊天對象的user-card
+      if (!cardGroup.querySelector(`.user-id-${recipient.id}`)) {
+        createUserCard(recipient)
+        cardGroup.querySelector(`.user-id-${recipient.id} .notify-icon`).remove()
+      }
+      const input = document.querySelector('.input-container textarea')
+      const senderId = currentUser.id.toString()
+      console.log(senderId)
+      const nameSpaceArray = [recipientId, senderId]
+      nameSpaceArray.sort((a, b) => { return a - b })
+      console.log(nameSpaceArray)
+      nameSpaceArray.splice(1, 0, '_')
+      console.log(nameSpaceArray)
+      const nameSpace = nameSpaceArray.join('')
+      console.log(nameSpace)
+      //將訊息傳送之後端
+      function sendMessage(e) {
+        if (e.key === 'Enter' && input.value.trim() !== '') {
+          socket.emit('private_message', {
+            senderId,
+            recipientId,
+            nameSpace,
+            message: input.value
+          })
+          input.value = ''
+        }
+      }
+      //監聽後端是否有來自xxxx_xxxx的消(xxxx為User id)
+      socket.on(nameSpace, msgObj => {
+        const messageGroup = document.querySelector('.message-group')
+        console.log(msgObj)
+        console.log(msgObj.sender.id, senderId)
+        //判斷訊息是否為自己發送的
+        if (msgObj.sender.id.toString() === senderId) {
+          messageGroup.innerHTML += `
+          <div class="chat-message-right user-id-${msgObj.sender.id}">
+            <div class="message">
+              ${msgObj.message}
+            </div>
+          </div>
+        `
+        }
+        //判斷訊息是否為別人發送的
+        if (msgObj.sender.id.toString() === recipientId) {
+          messageGroup.innerHTML += `
+          <div class="chat-message-left user-id-${msgObj.sender.id}">            
+            <div class="avatar-container" style="${messageGroup.lastElementChild.classList.contains('chat-message-left') ? `visibility: hidden;height:0;` : ''}">
+              <img src="${msgObj.sender.avatar}" alt="">
+            </div>
+            <div class="message" style="${messageGroup.lastElementChild.classList.contains('chat-message-left') ? `margin-top:0;` : ''}">
+              ${msgObj.message}
+            </div>
+          </div >
+        `
+        }
+        messageGroup.scrollTop = messageGroup.scrollHeight
+      })
+
+      input.addEventListener('keyup', sendMessage)
+    }
+
+  })()
+</script>

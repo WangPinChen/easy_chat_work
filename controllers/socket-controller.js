@@ -39,6 +39,29 @@ module.exports = (io) => {
       io.emit('public_message', msg)
     })
 
+    socket.on('private_message', (msgObj) => {
+      Promise.all([
+        User.findOne({
+          where: { id: msgObj.senderId },
+          raw: true
+        }),
+        User.findOne({
+          where: { id: msgObj.recipientId },
+          raw: true
+        })
+      ])
+        .then(([sender, recipient]) => {
+          if (!sender || !recipient) return
+          const data = {
+            sender,
+            recipient,
+            message: msgObj.message
+          }
+          io.emit(msgObj.nameSpace, data)
+          io.emit(msgObj.recipientId, data)
+        })
+    })
+
     socket.on('disconnect', () => {
       console.log('user disconnected')
     })

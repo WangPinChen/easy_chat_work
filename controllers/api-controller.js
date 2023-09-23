@@ -7,6 +7,13 @@ const apiController = {
     delete user.password
     res.json({ status: 'success', user })
   },
+  getUser: async (req, res) => {
+    const user = await User.findOne({
+      where: { id: req.params.userId },
+      attributes: { exclude: ['password'] }
+    })
+    res.json({ status: 'success', user })
+  },
   getComment: async (req, res) => {
     const user = await User.findOne({
       where: { id: req.params.userId },
