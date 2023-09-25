@@ -1,12 +1,19 @@
 <style>
   h1 {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
   }
 
   .title-container {
     padding: 0.5rem;
     border-bottom: 1px solid #cfdae3;
     width: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  .title-container i {
+    font-size: 1.2rem;
+    margin-right: 0.5rem;
   }
 
   .body-container {
@@ -65,7 +72,7 @@
   }
 
   .online-user-container .name-container .name {
-    font-size: 1.25rem;
+    font-size: 1rem;
     color: black;
   }
 
@@ -108,6 +115,7 @@
     margin: 0.25rem auto;
     display: flex;
     justify-content: center;
+    padding: 0 3rem;
   }
 
   .chat-container .system_message p {
@@ -153,7 +161,7 @@
 
   .chat-container .chat-message-left .name {
     overflow-wrap: break-word;
-    font-size: 1.2rem;
+    font-size: 1rem;
     color: white;
   }
 
@@ -192,20 +200,23 @@
       margin-left: 82px;
     }
 
-    .online-user-container .card {}
-
-    .online-user-container .avatar-container {
-      width: 50%;
-    }
-
-    .online-user-container .name-container {
-      display: none;
-    }
   }
 
   @media screen and (max-width:768px) {
     main {
       margin: 0 auto;
+    }
+
+    .title-container {
+      justify-content: center;
+    }
+
+    .online-user-container .title-container i {
+      font-size: 1.75rem;
+    }
+
+    .online-user-container .title-container h1 {
+      display: none;
     }
 
     .online-user-container .card {
@@ -234,9 +245,10 @@
       background-color: rgb(131, 137, 142, 0.25);
     }
 
-    .input-container {
-      margin-bottom: 5rem
+    .chat-container .input-container {
+      margin-bottom: 5rem;
     }
+
   }
 </style>
 
@@ -245,6 +257,7 @@
   <main>
     <div class="online-user-container">
       <div class="title-container">
+        <i class="fa-solid fa-users"></i>
         <h1>在線使用者</h1>
       </div>
       <div class="card-group">
@@ -279,7 +292,7 @@
             <p class="account">@{{this.account}}</p>
           </div>
           <div class="chat-link">
-            <a href="/message/{{this.id}}">
+            <a href="/message/private/{{this.id}}">
               <i class="fa-solid fa-message"></i>
             </a>
           </div>
