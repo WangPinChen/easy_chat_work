@@ -47,6 +47,12 @@
   .alert .fa-xmark {
     cursor: pointer;
   }
+
+  @media screen and (max-width: 768px) {
+    .alert {
+      min-width: 285px;
+    }
+  }
 </style>
 {{#if success_msg}}
 <div class="alert alert-success alert-dismissible" role="alert">
@@ -73,7 +79,7 @@
   const alertSuccess = document.querySelector('.alert')
   setTimeout(() => {
     alertSuccess.style.opacity = "0"
-  }, 3000)
+  }, 10000)
 
   const faXmark = document.querySelector('.fa-xmark')
   function closeMsg() {
