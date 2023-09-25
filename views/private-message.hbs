@@ -45,6 +45,7 @@
   }
 
   .user-container .card-group .card .avatar-container {
+    min-width: 50px;
     width: 30%;
     max-width: 85px;
     aspect-ratio: 1/1;
@@ -109,6 +110,7 @@
 
   .chat-contaier .chat-title .avatar-container {
     width: 5%;
+    min-width: 50px;
     aspect-ratio: 1/1;
     display: flex;
     justify-content: center;
@@ -215,6 +217,38 @@
     width: 100%;
     font-size: 1.25rem;
     resize: none;
+  }
+
+  @media screen and (max-width:1280px) {
+    main {
+      margin-left: 82px;
+      margin: 0 auto;
+      padding-left: 82px;
+    }
+  }
+
+  @media screen and (max-width:768px) {
+    main {
+      padding: 0;
+    }
+
+    .user-container .card-group .card .nameAccount .name {
+      font-size: 1rem;
+    }
+
+    .user-container .card-group .card .nameAccount .account {
+      font-size: 0.8rem;
+    }
+
+    .chat-contaier .chat-title {
+      justify-content: center;
+    }
+
+    .chat-contaier .chat-title .name {
+      font-size: 1rem;
+    }
+
+    .chat-contaier .chat-title .avatar-container {}
   }
 </style>
 
@@ -359,6 +393,20 @@
         cardGroup.appendChild(card)
       }
     }
+    function reHeightMain() {
+      const userContainer = document.querySelector('.user-container')
+      const chatContainer = document.querySelector('.chat-contaier')
+      const sidebar = document.querySelector('.sidebar')
+      const reHeight = window.innerHeight - sidebar.offsetHeight
+      if (window.innerWidth < 768) {
+        userContainer.style.height = `${reHeight}px`
+        chatContainer.style.height = `${reHeight}px`
+      }
+      if (window.innerWidth > 768) {
+        userContainer.style.height = `100vh`
+        chatContainer.style.height = `100vh`
+      }
+    }
     socket.on(`${currentUser.id}`, msgObj => {
       console.log()
       if (!cardGroup.querySelector(`.user-id-${msgObj.sender.id}`)) {
@@ -477,13 +525,14 @@
 
       input.addEventListener('keyup', sendMessage)
       messageGroup.addEventListener('scroll', readMsg)
-
       window.addEventListener('beforeunload', () => {
         axios.post('/api/message/read', { messageIds: readMsgs })
       })
 
     }
 
+    reHeightMain()
 
+    window.addEventListener('resize', reHeightMain)
   })()
 </script>
