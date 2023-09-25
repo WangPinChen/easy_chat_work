@@ -26,10 +26,11 @@
     position: absolute;
     display: flex;
     align-items: start;
-    width: auto;
     bottom: 10%;
     left: 5%;
     z-index: 1;
+    width: 100%;
+    max-width: 500px;
   }
 
 
@@ -45,9 +46,10 @@
 
   .banner-container .avatar-container p,
   .banner-container .avatar-container a {
+
     background-color: rgb(255, 255, 255, 0.9);
     padding: 0.5rem;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     border-radius: 0 15px 15px 0;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     margin-bottom: 0.5rem;
@@ -66,12 +68,13 @@
     text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     cursor: pointer;
     background-color: rgb(1, 143, 253, 0.2);
-    padding: 0.25rem;
+    padding: 0.4rem;
     border-radius: 50%;
   }
 
   .banner-container .fa-user-gear:hover {
     color: white;
+    background-color: rgb(1, 143, 253, 0.5);
   }
 
   main .self-intro-container,
@@ -86,14 +89,15 @@
   main .self-intro-container h1 {
     margin-bottom: 0.5rem;
     border-bottom: 1px solid #cfdae3;
-    font-size: 1.5rem;
-  }
-
-  main .self-intro-container p {
     font-size: 1.25rem;
   }
 
+  main .self-intro-container p {
+    font-size: 1rem;
+  }
+
   .comment-container h1 {
+    font-size: 1.25rem;
     border-bottom: 1px solid #cfdae3;
   }
 
@@ -116,12 +120,12 @@
   }
 
   .card .nameComment a {
-    font-size: 1.5rem;
+    font-size: 1rem;
     color: black;
   }
 
   .card .nameComment p {
-    font-size: 1.25rem;
+    font-size: 1rem;
     color: #83898e;
   }
 
@@ -145,7 +149,7 @@
   .comment-form input {
     width: 85%;
     border-radius: 15px 0 0 15px;
-    font-size: 1.25rem;
+    font-size: 1rem;
     padding: 0 1rem;
     height: 33px;
   }
@@ -156,6 +160,10 @@
     border-radius: 0 15px 15px 0;
     min-width: 27px;
     white-space: nowrap;
+  }
+
+  .comment-form button i {
+    display: none;
   }
 
   .comment-form-container p {
@@ -283,21 +291,81 @@
       margin: 0 auto;
     }
 
-    .comment-container {
-      margin-bottom: 5rem;
+    .banner-container .background {
+      aspect-ratio: 3/1;
+    }
+
+    .banner-container .avatar-container p {
+      font-size: 1.5rem;
+    }
+
+    .banner-container .avatar-container a {
+      font-size: 1.2rem;
     }
 
     .banner-container .avatar-container {
       position: relative;
+      width: 90%;
     }
 
     .banner-container .avatar {
       width: 35%;
     }
 
-    .modal-content .edit-form-bottom {
+    .comment-container {
+      margin-bottom: 5rem;
+    }
+
+    .comment-form-container {
+      width: 95%;
+    }
+
+    .comment-form button {
+      min-width: 55px;
+    }
+
+    .comment-form button span {
+      display: none;
+    }
+
+    .comment-form button i {
+      font-size: 1.1rem;
       display: block;
     }
+
+    .modal-content {
+      width: 95%;
+      max-height: 80vh;
+    }
+
+    .modal-content .edit-form .background-container i,
+    .modal-content .edit-form .avatar-name-container i {
+      font-size: 1.5rem;
+    }
+
+    .modal-content .edit-form .background-img {
+      aspect-ratio: 3/1;
+    }
+
+    .modal-content .edit-form .avatar-container {
+      width: 30%;
+    }
+
+    .modal-content .edit-form-bottom {
+      display: block;
+      margin-bottom: 1rem;
+    }
+
+    .modal-content .edit-form-bottom input {
+      width: 100%;
+    }
+
+    .modal-content .edit-form-bottom textarea {
+      width: 100%;
+      height: 5rem;
+    }
+
+
   }
 </style>
 
@@ -320,7 +388,7 @@
           https://i.imgur.com/FUerPDO.png
         {{/if}}
         " alt="">
-        <div>
+        <div "name-container">
           <p>{{user.name}}</p>
           {{#if user.isUserSelf}}
           {{else}}
@@ -352,7 +420,10 @@
       <div class="comment-form-container">
         <form class="comment-form" action="/comment/{{user.id}}" method="post">
           <input name="comment" type="text" placeholder="留下給 {{user.name}} 的留言吧。" required>
-          <button>送出</button>
+          <button>
+            <span>送出</span>
+            <i class="fa-solid fa-paper-plane"></i>
+          </button>
         </form>
         <p>字數限制1-250字，<span>0</span>/250。</p>
       </div>
