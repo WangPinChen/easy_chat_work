@@ -374,7 +374,7 @@
     const fristUread = document.querySelector('.unread')
     const messageGroup = document.querySelector('.message-group')
     const readMsgs = []
-    //加入system-message:未讀訊息
+    //加入system-message:未讀訊息 並且滑動頁面到指定位置
     if (fristUread) {
       const systemMsg = document.createElement('div')
       systemMsg.classList.add('system-message')
@@ -384,6 +384,10 @@
         </div>
       `
       messageGroup.insertBefore(systemMsg, fristUread)
+      fristUread.scrollIntoView({ behavior: 'smooth' })
+      //如果沒有未讀訊息，滑動到最後一筆聊天訊息
+    } else if (!fristUread && messageGroup.lastElementChild) {
+      messageGroup.lastElementChild.scrollIntoView({ behavior: 'smooth' })
     }
     //如果路由有id確定進入聊天室窗
     if (recipientId && recipientId !== 'private') {
