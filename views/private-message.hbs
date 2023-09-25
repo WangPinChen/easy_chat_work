@@ -20,6 +20,10 @@
     border-right: 1px solid #cfdae3;
   }
 
+  .user-toggle-label {
+    display: none;
+  }
+
   .user-container {
     width: 20%;
     border-right: 1px solid #cfdae3;
@@ -232,12 +236,55 @@
       padding: 0;
     }
 
+    .user-toggle-label {
+      display: block;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 1;
+      background-color: rgb(207, 218, 227, 0.2);
+      border-radius: 5px;
+      padding: 0.25rem 0.5rem;
+      cursor: pointer;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .user-toggle-label i {
+      font-size: 1.75rem;
+      color: #018ffd;
+    }
+
+    .user-toggle-label i:hover {
+      color: rgb(1, 143, 253, 0.7);
+    }
+
+    .user-toggle-label:hover {
+      background-color: rgb(207, 218, 227, 0.5)
+    }
+
+    .user-container {
+      background-color: white;
+      position: absolute;
+      padding-top: 60px;
+      width: 60vw;
+      transition: 0.5s ease;
+      transform: translateX(-60vw)
+    }
+
+    .user-toggle-input:checked+.user-container {
+      transform: translateX(0);
+    }
+
     .user-container .card-group .card .nameAccount .name {
       font-size: 1rem;
     }
 
     .user-container .card-group .card .nameAccount .account {
       font-size: 0.8rem;
+    }
+
+    .chat-contaier {
+      width: 100%;
     }
 
     .chat-contaier .chat-title {
@@ -255,6 +302,10 @@
 <div class="body-container">
   {{> sidebar}}
   <main>
+
+
+    <label class="user-toggle-label" for="user-toggle-input"><i class="fa-solid fa-comments"></i></label>
+    <input class="user-toggle-input" type="checkbox" name="" id="user-toggle-input" style="display: none;">
     <div class="user-container">
       <div class="card-group">
         {{!-- 產生card的地方 --}}
@@ -290,7 +341,10 @@
         </a> --}}
 
       </div>
+
     </div>
+
+
     <div class="chat-contaier">
       <div class="chat-title">
         <div class="avatar-container">
