@@ -1,4 +1,4 @@
-const { User, Comment } = require('../models')
+const { User, Comment, PrivateMsg } = require('../models')
 const { Sequelize } = require('sequelize')
 
 const apiController = {
@@ -39,6 +39,17 @@ const apiController = {
       limit,
     })
     res.json({ status: 'success', users })
+  },
+  readMsg: async (req, res) => {
+    const messageIds = req.body.messageIds;
+    for (const messageId of messageIds) {
+      console.log(messageId)
+      await PrivateMsg.update(
+        { isRead: true },
+        { where: { id: messageId } }
+      )
+    }
+
   }
 }
 

@@ -1,4 +1,4 @@
-const { User } = require('../models')
+const { User, PrivateMsg } = require('../models')
 
 module.exports = (io) => {
   io.on('connection', (socket) => {
@@ -57,6 +57,16 @@ module.exports = (io) => {
             recipient,
             message: msgObj.message
           }
+          return data
+        })
+        .then(data => {
+          console.log(msgObj)
+          const { message, recipientId, senderId } = msgObj
+          PrivateMsg.create({
+            senderId,
+            recipientId,
+            message
+          })
           io.emit(msgObj.nameSpace, data)
           io.emit(msgObj.recipientId, data)
         })

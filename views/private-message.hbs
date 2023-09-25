@@ -156,6 +156,12 @@
     margin: 0.25rem auto;
     display: flex;
     justify-content: center;
+    align-items: center;
+    background-color: rgb(1, 143, 253, 0.2);
+  }
+
+  .chat-contaier .message-group .system-message .message {
+    margin: 0.25rem 0;
   }
 
   .chat-contaier .message-group .chat-message-left {
@@ -218,9 +224,25 @@
     <div class="user-container">
       <div class="card-group">
         {{!-- 產生card的地方 --}}
+        {{#each users}}
+        <a href="/message/private/{{this.userId}}" class="card user-id-{{this.userId}}">
+          <div class="avatar-container">
+            <img src="{{this.userAvatar}}" alt="">
+          </div>
+          <div class="nameAccount">
+            <p class="name">{{this.userName}}</p>
+            <p class="account">@{{this.userAccount}}</p>
+          </div>
+          {{#if this.unreadCount}}
+          <div class="notify-icon">
+            {{this.unreadCount}}
+          </div>
+          {{/if}}
+        </a>
+        {{/each}}
 
         {{!-- render-sample↓ --}}
-        <a href="#" class="card user-id-xxxx">
+        {{!-- <a href="#" class="card user-id-xxxx">
           <div class="avatar-container">
             <img src="https://i.imgur.com/1IXoXSK.jpeg" alt="">
           </div>
@@ -231,7 +253,7 @@
           <div class="notify-icon">
             3
           </div>
-        </a>
+        </a> --}}
 
       </div>
     </div>
@@ -244,7 +266,44 @@
       </div>
       <div class="message-group">
 
-        <div class="chat-message-left user-id-">
+        {{#each messages}}
+
+        {{!-- <div class="system-message">
+          <div class="message">
+            未讀訊息
+          </div>
+        </div> --}}
+
+
+        {{#if isUserSelf}}
+        <div class="chat-message-right user-id-">
+          <div class="message">
+            {{this.message}}
+          </div>
+        </div>
+
+        {{else}}
+        <div class="chat-message-left user-id-{{this.sender.id}} {{#if isRead}}{{else}}unread {{/if}}"
+          data-messageId="{{this.id}}">
+          <div class="avatar-container">
+            <img src="{{this.sender.avatar}}" alt="">
+          </div>
+          <div class="message">
+            {{this.message}}
+          </div>
+        </div>
+        {{/if}}
+        {{/each}}
+
+
+        {{!-- render-sample↓ --}}
+        {{!-- <div class="system-message">
+          <div class="message">
+            system_message
+          </div>
+        </div>
+
+        <div class="chat-message-left user-id-XXX unread">
           <div class="avatar-container">
             <img src="https://i.imgur.com/2f3gHqv.jpeg" alt="">
           </div>
@@ -257,13 +316,9 @@
           <div class="message">
             你好~
           </div>
-        </div>
+        </div> --}}
 
-        <div class="system-message">
-          <div class="message">
-            system_message
-          </div>
-        </div>
+
       </div>
       <div class="input-container">
         <textarea rows="1"></textarea>
@@ -305,9 +360,9 @@
       }
     }
     socket.on(`${currentUser.id}`, msgObj => {
+      console.log()
       if (!cardGroup.querySelector(`.user-id-${msgObj.sender.id}`)) {
         createUserCard(msgObj.sender)
-
       } else if (cardGroup.querySelector(`.user-id-${msgObj.sender.id}`)) {
         const card = cardGroup.querySelector(`.user-id-${msgObj.sender.id}`)
         let unreadMsgCount = Number(card.querySelector('.notify-icon').innerText)
@@ -315,15 +370,25 @@
         card.querySelector('.notify-icon').innerText = unreadMsgCount
       }
     })
+
+    const fristUread = document.querySelector('.unread')
+    const messageGroup = document.querySelector('.message-group')
+    const readMsgs = []
+    //加入system-message:未讀訊息
+    if (fristUread) {
+      const systemMsg = document.createElement('div')
+      systemMsg.classList.add('system-message')
+      systemMsg.innerHTML = `
+        <div class="message">
+          未讀訊息:
+        </div>
+      `
+      messageGroup.insertBefore(systemMsg, fristUread)
+    }
     //如果路由有id確定進入聊天室窗
     if (recipientId && recipientId !== 'private') {
       const recipientRes = await axios.get(`/api/user/${recipientId}`)
       const recipient = recipientRes.data.user
-      //產生聊天對象的user-card
-      if (!cardGroup.querySelector(`.user-id-${recipient.id}`)) {
-        createUserCard(recipient)
-        cardGroup.querySelector(`.user-id-${recipient.id} .notify-icon`).remove()
-      }
       const input = document.querySelector('.input-container textarea')
       const senderId = currentUser.id.toString()
       console.log(senderId)
@@ -334,6 +399,12 @@
       console.log(nameSpaceArray)
       const nameSpace = nameSpaceArray.join('')
       console.log(nameSpace)
+      //產生聊天對象的user-card
+      if (!cardGroup.querySelector(`.user-id-${recipient.id}`)) {
+        createUserCard(recipient)
+        cardGroup.querySelector(`.user-id-${recipient.id} .notify-icon`).remove()
+      }
+
       //將訊息傳送之後端
       function sendMessage(e) {
         if (e.key === 'Enter' && input.value.trim() !== '') {
@@ -346,9 +417,32 @@
           input.value = ''
         }
       }
+      //將訊息變成已讀的function
+      function readMsg() {
+        const scrollTop = messageGroup.scrollTop
+        const groupHeight = parseFloat(getComputedStyle(messageGroup).height)
+        const messages = messageGroup.querySelectorAll('.unread')
+
+        messages.forEach(message => {
+          const distance = message.getBoundingClientRect().bottom - messageGroup.getBoundingClientRect().top
+          if (distance < groupHeight) {
+
+            readMsgs.push(message.dataset.messageid)
+            message.classList.remove("unread")
+
+            const cardNotify = cardGroup.querySelector('.card .notify-icon')
+            cardNotify.innerText = Number(cardNotify.innerText) - 1
+            console.log(message)
+            console.log(cardNotify.innerText)
+            if (Number(cardNotify.innerText) === 0) cardNotify.remove()
+          }
+        })
+        console.log(readMsgs)
+      }
+      //剛進入頁面時將目前可視範圍的message變成已讀
+      readMsg()
       //監聽後端是否有來自xxxx_xxxx的消(xxxx為User id)
       socket.on(nameSpace, msgObj => {
-        const messageGroup = document.querySelector('.message-group')
         console.log(msgObj)
         console.log(msgObj.sender.id, senderId)
         //判斷訊息是否為自己發送的
@@ -378,7 +472,14 @@
       })
 
       input.addEventListener('keyup', sendMessage)
+      messageGroup.addEventListener('scroll', readMsg)
+
+      window.addEventListener('beforeunload', () => {
+        axios.post('/api/message/read', { messageIds: readMsgs })
+      })
+
     }
+
 
   })()
 </script>

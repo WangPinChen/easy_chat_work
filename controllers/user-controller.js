@@ -1,7 +1,8 @@
 const bcrypt = require("bcryptjs")
 const multer = require('multer')
 const upload = multer({ dest: 'temp/' }).fields([{ name: 'avatar', maxCount: 1 }, { name: 'background', maxCount: 1 }])
-const { User, Comment } = require('../models')
+const { User, Comment, PrivateMsg, sequelize } = require('../models')
+const { Op } = require('sequelize')
 const { imgurFileHandler } = require('../helpers/file-helpers')
 
 const userController = {
@@ -78,7 +79,7 @@ const userController = {
     upload(req, res, async () => {
       let backgroundPath = ''
       let avatarPath = ''
-      console.log(req.files)
+
       if (Object.keys(req.files).length !== 0) {
         if (req.files.background) {
           backgroundPath = await imgurFileHandler(req.files.background[0])
@@ -133,13 +134,141 @@ const userController = {
       where: { isJoinPublicRoom: true },
       raw: true
     })
-    console.log(onlineUsers)
     res.render('message', { onlineUsers })
   },
-  getPrivateMessage: async (req, res) => {
-    res.render('private-message')
-  }
+  getPrivateMessageHome: async (req, res) => {
+    sequelize.query(
+      `
+        SELECT pm.*,
+        senders.id as senderId,
+        senders.avatar as senderAvatar,
+        senders.name as senderName,
+        senders.account as senderAccount,
+        recipients.id as recipientId,
+        recipients.avatar as recipientAvatar,
+        recipients.name as recipientName,
+        recipients.account as recipientAccount,
+        COUNT(CASE WHEN pm.is_read = 0 THEN 1 ELSE NULL END) AS unreadCount,
+        MAX(pm.created_at) AS max_created_at
+        FROM private_messages AS pm
+        INNER JOIN users AS senders ON pm.sender_id = senders.id
+        INNER JOIN users AS recipients ON pm.recipient_id = recipients.id
+        WHERE pm.sender_id = ${req.user.id} OR pm.recipient_id = ${req.user.id}
+        GROUP BY pm.sender_id, pm.recipient_id
+        ORDER BY max_created_at DESC;
+      `
+      , { type: sequelize.QueryTypes.SELECT }
+    ).then(users => {
+      const data = users.map(user => {
 
+        if (user.sender_id === req.user.id) {
+          return {
+            userId: user.recipientId,
+            userAvatar: user.recipientAvatar,
+            userAccount: user.recipientAccount,
+            userName: user.recipientName
+          }
+        } else {
+          return {
+            userId: user.senderId,
+            userAvatar: user.senderAvatar,
+            userAccount: user.senderAccount,
+            userName: user.senderName,
+            unreadCount: user.unreadCount
+          }
+        }
+      })
+      const uniqueData = []
+      const seenUserIds = {}
+      for (const user of data) {
+        if (seenUserIds[user.userId]) {
+          continue
+        }
+        seenUserIds[user.userId] = true
+        uniqueData.push(user)
+      }
+      res.render('private-message', { users: uniqueData })
+    })
+  },
+  getPrivateMessage: async (req, res) => {
+    Promise.all([
+      PrivateMsg.findAll({
+        where: {
+          // senderId: req.params.userId,
+          // recipientId: req.user.id,
+          senderId: { [Op.or]: [req.params.userId, req.user.id] },
+          recipientId: { [Op.or]: [req.params.userId, req.user.id] },
+        },
+        include: [{
+          model: User,
+          as: 'sender'
+        }],
+        nest: true,
+        raw: true
+      }),
+      sequelize.query(
+        `
+        SELECT pm.*,
+        senders.id as senderId,
+        senders.avatar as senderAvatar,
+        senders.name as senderName,
+        senders.account as senderAccount,
+        recipients.id as recipientId,
+        recipients.avatar as recipientAvatar,
+        recipients.name as recipientName,
+        recipients.account as recipientAccount,
+        COUNT(CASE WHEN pm.is_read = 0 THEN 1 ELSE NULL END) AS unreadCount,
+        MAX(pm.created_at) AS max_created_at
+        FROM private_messages AS pm
+        INNER JOIN users AS senders ON pm.sender_id = senders.id
+        INNER JOIN users AS recipients ON pm.recipient_id = recipients.id
+        WHERE pm.sender_id = ${req.user.id} OR pm.recipient_id = ${req.user.id}
+        GROUP BY pm.sender_id, pm.recipient_id
+        ORDER BY max_created_at DESC;
+      `
+        , { type: sequelize.QueryTypes.SELECT }
+      )
+    ])
+      .then(([messages, users]) => {
+
+        messages.map(message => {
+          if (message.sender.id === req.user.id) {
+            message.isUserSelf = true
+          }
+        })
+        //處理user-list
+        const data = users.map(user => {
+
+          if (user.sender_id === req.user.id) {
+            return {
+              userId: user.recipientId,
+              userAvatar: user.recipientAvatar,
+              userAccount: user.recipientAccount,
+              userName: user.recipientName
+            }
+          } else {
+            return {
+              userId: user.senderId,
+              userAvatar: user.senderAvatar,
+              userAccount: user.senderAccount,
+              userName: user.senderName,
+              unreadCount: user.unreadCount
+            }
+          }
+        })
+        const uniqueData = []
+        const seenUserIds = {}
+        for (const user of data) {
+          if (seenUserIds[user.userId]) {
+            continue
+          }
+          seenUserIds[user.userId] = true
+          uniqueData.push(user)
+        }
+        console.log(messages)
+        res.render('private-message', { users: uniqueData, messages })
+      })
+  }
 }
 
 module.exports = userController
