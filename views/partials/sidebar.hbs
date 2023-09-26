@@ -70,6 +70,7 @@
     .sidebar-ul li i {
       font-size: 1.5rem;
       margin: 0;
+      position: relative;
     }
 
     .sidebar-ul li p {
@@ -78,6 +79,17 @@
 
     .logout-container i {
       display: none;
+    }
+
+    .notify-icon {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: red;
+      position: absolute;
+      right: 0;
+      top: 0;
+      border: 1px solid white;
     }
   }
 
@@ -162,9 +174,11 @@
         </p>
       </li>
     </a>
-    <a href="/message/private">
-      <li>
-        <i class="fa-solid fa-comments"></i>
+    <a class="" href="/message/private">
+      <li class="private-message-li">
+        <i class="fa-solid fa-comments">
+          {{!-- <div class="notify-icon"></div> --}}
+        </i>
         <p>
           私人聊天
         </p>
@@ -185,3 +199,29 @@
   <label class="logout-toggle-label" for="logout-toggle-input">...</label>
 
 </section>
+
+<script>
+  (async () => {
+    const socket = io()
+    const currentUserRes = await axios.get('/api/user')
+    const currentUser = currentUserRes.data.user
+    const checkUnreadMsgRes = await axios.get(`/api/user/${currentUser.id}/unread_message`)
+    const privateNotifyIcon = document.querySelector('.private-message-li i .notify-icon')
+    console.log(privateNotifyIcon)
+    if (!checkUnreadMsgRes.data.isRead) {
+      const privateIcon = document.querySelector('.private-message-li i')
+      const notifyIcon = document.createElement('div')
+      notifyIcon.className = 'notify-icon'
+      privateIcon.appendChild(notifyIcon)
+    }
+
+    socket.on(`${currentUser.id}`, msgObj => {
+      if (msgObj.type = 'privateMessage' && privateNotifyIcon !== null) {
+        const privateIcon = document.querySelector('.private-message-li i')
+        const notifyIcon = document.createElement('div')
+        notifyIcon.className = 'notify-icon'
+        privateIcon.appendChild(notifyIcon)
+      }
+    })
+  })()
+</script>

@@ -50,6 +50,20 @@ const apiController = {
       )
     }
 
+  },
+  checkUnreadMsg: async (req, res) => {
+    console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXX')
+    const message = await PrivateMsg.findOne({
+      where: {
+        recipientId: req.params.userId,
+        isRead: false
+      }
+    })
+    if (message) {
+      res.json({ status: 'success', isRead: false })
+    } else if (!message) {
+      res.json({ status: 'success', isRead: true })
+    }
   }
 }
 

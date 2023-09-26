@@ -55,7 +55,8 @@ module.exports = (io) => {
           const data = {
             sender,
             recipient,
-            message: msgObj.message
+            message: msgObj.message,
+            type: msgObj.type
           }
           return data
         })

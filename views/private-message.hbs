@@ -427,7 +427,6 @@
     const cardGroup = document.querySelector('.card-group')
 
     console.log(recipientId)
-    //監聽是否有自己的訊息，並且產生user-card
     function createUserCard(obj) {
       const card = document.createElement('a')
       card.classList.add('card', `user-id-${obj.id}`)
@@ -464,6 +463,7 @@
         chatContainer.style.height = `100vh`
       }
     }
+    //監聽是否有自己的訊息，並且產生user-card
     socket.on(`${currentUser.id}`, msgObj => {
       console.log()
       if (!cardGroup.querySelector(`.user-id-${msgObj.sender.id}`)) {
@@ -521,7 +521,8 @@
             senderId,
             recipientId,
             nameSpace,
-            message: input.value
+            message: input.value,
+            type: 'privateMessage'
           })
           input.value = ''
         }
@@ -543,7 +544,17 @@
             cardNotify.innerText = Number(cardNotify.innerText) - 1
             console.log(message)
             console.log(cardNotify.innerText)
-            if (Number(cardNotify.innerText) === 0) cardNotify.remove()
+            if (Number(cardNotify.innerText) === 0) {
+              const notifyIcons = cardGroup.querySelectorAll('.notify-icon')
+              unreadMessageCount = 0
+              cardNotify.remove()
+              for (let i = 0; i < notifyIcons.length; i++) {
+                unreadMessageCount += Number(notifyIcons[i].innerText)
+              }
+              if (unreadMessageCount === 0) {
+                document.querySelector('.sidebar .private-message-li .notify-icon').remove()
+              }
+            }
           }
         })
         console.log(readMsgs)
