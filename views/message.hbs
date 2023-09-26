@@ -245,8 +245,9 @@
       background-color: rgb(131, 137, 142, 0.25);
     }
 
-    .chat-container .input-container {
-      margin-bottom: 5rem;
+    .chat-container .chat-message-right .messages,
+    .chat-container .chat-message-left .messages {
+      max-width: 60%;
     }
 
   }
@@ -328,6 +329,21 @@
     const chatMessageGroup = document.querySelector('.chat-message-group')
     const currentUserRes = await axios.get('api/user')
     const currentUser = currentUserRes.data.user
+
+    function reHeightMain() {
+      const userContainer = document.querySelector('.online-user-container')
+      const chatContainer = document.querySelector('.chat-container')
+      const sidebar = document.querySelector('.sidebar')
+      const reHeight = window.innerHeight - sidebar.offsetHeight
+      if (window.innerWidth < 768) {
+        userContainer.style.height = `${reHeight}px`
+        chatContainer.style.height = `${reHeight}px`
+      }
+      if (window.innerWidth > 768) {
+        userContainer.style.height = `100vh`
+        chatContainer.style.height = `100vh`
+      }
+    }
 
     //捲動scrollbar到最底部
     chatMessageGroup.scrollTop = chatMessageGroup.scrollHeight
@@ -448,6 +464,8 @@
       //捲動scrollbar到最底部
       chatMessageGroup.scrollTop = chatMessageGroup.scrollHeight
     })
+    // 調整在768px之下main底下的元素高度
+    reHeightMain()
     //監測使用者是否離開頁面
     window.addEventListener('beforeunload', () => {
       socket.emit('online_user', {
