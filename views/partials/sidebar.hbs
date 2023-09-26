@@ -37,6 +37,10 @@
     margin-right: 0.75rem;
   }
 
+  #logout-toggle-input {
+    display: none;
+  }
+
   .logout-container button {
     width: 100%;
     margin: 0.25rem 0;
@@ -47,6 +51,10 @@
   }
 
   .logout-container .sub-form {
+    display: none;
+  }
+
+  .logout-toggle-label {
     display: none;
   }
 
@@ -85,11 +93,10 @@
       background-color: rgb(255, 255, 255, 0.85);
     }
 
-    .logout-container,
+
     .log-container {
       display: none;
     }
-
 
     .sidebar-ul {
       display: flex;
@@ -97,7 +104,23 @@
       justify-content: space-around;
     }
 
+    .logout-container {
+      position: absolute;
+      top: -50px;
+      right: 5px;
+      width: 125px;
+      transform: translate(140px);
+      transition: 0.5s ease;
+    }
 
+    #logout-toggle-input:checked+.logout-container {
+      transform: translate(0);
+    }
+
+    .logout-toggle-label {
+      display: block;
+      cursor: pointer;
+    }
 
   }
 </style>
@@ -144,6 +167,8 @@
     </a>
   </ul>
 
+
+  <input type="checkbox" id="logout-toggle-input">
   <div class="logout-container">
     <form class="main-form" action="/logout" method="post">
       <button>
@@ -152,5 +177,6 @@
       </button>
     </form>
   </div>
+  <label class="logout-toggle-label" for="logout-toggle-input">...</label>
 
 </section>
