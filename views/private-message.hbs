@@ -252,10 +252,22 @@
     .user-toggle-label i {
       font-size: 1.75rem;
       color: #018ffd;
+      position: relative
     }
 
     .user-toggle-label i:hover {
       color: rgb(1, 143, 253, 0.7);
+    }
+
+    .user-toggle-label i .notify-icon {
+      width: 10px;
+      height: 10px;
+      background-color: red;
+      border-radius: 50%;
+      position: absolute;
+      top: 0;
+      right: 0;
+      border: 1px solid white;
     }
 
     .user-toggle-label:hover {
@@ -304,7 +316,11 @@
   <main>
 
 
-    <label class="user-toggle-label" for="user-toggle-input"><i class="fa-solid fa-comments"></i></label>
+    <label class="user-toggle-label" for="user-toggle-input">
+      <i class="fa-solid fa-comments">
+        {{!-- <div class="notify-icon"></div> --}}
+      </i>
+    </label>
     <input class="user-toggle-input" type="checkbox" name="" id="user-toggle-input" style="display: none;">
     <div class="user-container">
       <div class="card-group">
@@ -341,11 +357,6 @@
         </a> --}}
 
       </div>
-
-    </div>
-
-    <div style="display: none;">
-      {{user}}
     </div>
 
     <div class="chat-contaier">
@@ -470,16 +481,32 @@
         createUserCard(msgObj.sender)
       } else if (cardGroup.querySelector(`.user-id-${msgObj.sender.id}`)) {
         const card = cardGroup.querySelector(`.user-id-${msgObj.sender.id}`)
-        let unreadMsgCount = Number(card.querySelector('.notify-icon').innerText)
-        unreadMsgCount += 1
-        card.querySelector('.notify-icon').innerText = unreadMsgCount
+        if (card.querySelector('.notify-icon')) {
+          let unreadMsgCount = Number(card.querySelector('.notify-icon').innerText)
+          unreadMsgCount += 1
+          card.querySelector('.notify-icon').innerText = unreadMsgCount
+        } else {
+          const notifyIcon = document.createElement('div')
+          notifyIcon.className = 'notify-icon'
+          notifyIcon.innerText = 1
+          card.appendChild(notifyIcon)
+        }
       }
+      const notifyIcon = document.createElement('div')
+      notifyIcon.classList = 'notify-icon'
+      document.querySelector('.user-toggle-label i').appendChild(notifyIcon)
     })
 
     const fristUread = document.querySelector('.unread')
     const messageGroup = document.querySelector('.message-group')
     const input = document.querySelector('.input-container textarea')
     const readMsgs = []
+    //判斷是user group裡面是否有未讀訊息。如果有，將user-toggle-label 加上小紅點
+    if (cardGroup.querySelectorAll('.card .notify-icon').length > 0) {
+      const notifyIcon = document.createElement('div')
+      notifyIcon.className = 'notify-icon'
+      document.querySelector('.user-toggle-label i').appendChild(notifyIcon)
+    }
     //加入system-message:未讀訊息 並且滑動頁面到指定位置
     if (fristUread) {
       const systemMsg = document.createElement('div')
@@ -495,7 +522,7 @@
     } else if (!fristUread && messageGroup.lastElementChild) {
       messageGroup.lastElementChild.scrollIntoView({ behavior: 'smooth' })
     }
-    //如果路由有id確定進入聊天室窗
+    //**如果路由有id確定進入聊天室窗**
     if (recipientId && recipientId !== 'private') {
       const recipientRes = await axios.get(`/api/user/${recipientId}`)
       const recipient = recipientRes.data.user
@@ -553,6 +580,7 @@
               }
               if (unreadMessageCount === 0) {
                 document.querySelector('.sidebar .private-message-li .notify-icon').remove()
+                document.querySelector('.user-toggle-label i .notify-icon').remove()
               }
             }
           }

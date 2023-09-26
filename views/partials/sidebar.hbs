@@ -206,8 +206,6 @@
     const currentUserRes = await axios.get('/api/user')
     const currentUser = currentUserRes.data.user
     const checkUnreadMsgRes = await axios.get(`/api/user/${currentUser.id}/unread_message`)
-    const privateNotifyIcon = document.querySelector('.private-message-li i .notify-icon')
-    console.log(privateNotifyIcon)
     if (!checkUnreadMsgRes.data.isRead) {
       const privateIcon = document.querySelector('.private-message-li i')
       const notifyIcon = document.createElement('div')
@@ -216,7 +214,9 @@
     }
 
     socket.on(`${currentUser.id}`, msgObj => {
-      if (msgObj.type = 'privateMessage' && privateNotifyIcon !== null) {
+      const privateNotifyIcon = document.querySelector('.private-message-li i .notify-icon')
+      console.log(`socket.get: nameSpace - ${currentUser.id}`)
+      if (msgObj.type = 'privateMessage' && privateNotifyIcon === null) {
         const privateIcon = document.querySelector('.private-message-li i')
         const notifyIcon = document.createElement('div')
         notifyIcon.className = 'notify-icon'
