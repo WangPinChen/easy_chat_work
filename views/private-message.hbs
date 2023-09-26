@@ -344,13 +344,16 @@
 
     </div>
 
+    <div style="display: none;">
+      {{user}}
+    </div>
 
     <div class="chat-contaier">
       <div class="chat-title">
         <div class="avatar-container">
-          <img src="https://i.imgur.com/slA9fWY.jpeg" alt="">
+          <img src="{{chatUser.avatar}}" alt="">
         </div>
-        <p class="name">莉莉絲</p>
+        <p class="name">{{chatUser.name}}</p>
       </div>
       <div class="message-group">
 
@@ -475,6 +478,7 @@
 
     const fristUread = document.querySelector('.unread')
     const messageGroup = document.querySelector('.message-group')
+    const input = document.querySelector('.input-container textarea')
     const readMsgs = []
     //加入system-message:未讀訊息 並且滑動頁面到指定位置
     if (fristUread) {
@@ -495,7 +499,6 @@
     if (recipientId && recipientId !== 'private') {
       const recipientRes = await axios.get(`/api/user/${recipientId}`)
       const recipient = recipientRes.data.user
-      const input = document.querySelector('.input-container textarea')
       const senderId = currentUser.id.toString()
       console.log(senderId)
       const nameSpaceArray = [recipientId, senderId]
@@ -584,9 +587,13 @@
       })
 
     }
-
+    //如果路由沒有id是在主頁
+    if (recipientId == 'private') {
+      document.querySelector('.chat-contaier .avatar-container').style.display = 'none'
+      input.disabled = true
+    }
+    // 調整在768px之下main底下的元素高度
     reHeightMain()
-
     window.addEventListener('resize', reHeightMain)
   })()
 </script>

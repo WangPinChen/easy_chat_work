@@ -227,10 +227,16 @@ const userController = {
         ORDER BY max_created_at DESC;
       `
         , { type: sequelize.QueryTypes.SELECT }
-      )
+      ),
+      User.findOne({
+        where: { id: req.params.userId },
+        raw: true
+      })
     ])
-      .then(([messages, users]) => {
-
+      .then(([messages, users, user]) => {
+        if (!user) {
+          return res.redirect('back')
+        }
         messages.map(message => {
           if (message.sender.id === req.user.id) {
             message.isUserSelf = true
@@ -265,8 +271,7 @@ const userController = {
           seenUserIds[user.userId] = true
           uniqueData.push(user)
         }
-        console.log(messages)
-        res.render('private-message', { users: uniqueData, messages })
+        res.render('private-message', { users: uniqueData, messages, chatUser: user })
       })
   }
 }
