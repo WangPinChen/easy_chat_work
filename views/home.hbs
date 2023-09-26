@@ -70,6 +70,7 @@
     background-color: rgb(1, 143, 253, 0.2);
     padding: 0.4rem;
     border-radius: 50%;
+    z-index: 1;
   }
 
   .banner-container .fa-user-gear:hover {
@@ -109,10 +110,19 @@
     padding-bottom: 0.5rem;
   }
 
+
+
   .card img {
-    width: 20%;
-    height: 20%;
-    padding: 0.5rem;
+    width: 100%;
+    max-width: 150px;
+    margin: 0.5rem;
+    aspect-ratio: 1/1;
+    box-shadow: 5px 5px 10px 3px rgb(119, 114, 114, 0.4);
+    transition: 0.5s;
+  }
+
+  .card .avatar-a:hover img {
+    filter: brightness(1.2);
   }
 
   .card .nameComment {
@@ -392,7 +402,7 @@
           <p>{{user.name}}</p>
           {{#if user.isUserSelf}}
           {{else}}
-          <a href="/message/{{user.id}}">
+          <a href="/message/private/{{user.id}}">
             <i class="fa-solid fa-message"></i>
             聊聊
           </a>
@@ -425,7 +435,7 @@
             <i class="fa-solid fa-paper-plane"></i>
           </button>
         </form>
-        <p>字數限制1-250字，<span>0</span>/250。</p>
+        <p>字數限制1-250字，<span class="word-limit">0</span>/250。</p>
       </div>
       {{/if}}
       <div class="card-group">
@@ -513,7 +523,9 @@
         }
         card.className = 'card'
         card.innerHTML = `
-          <img src="${comment.User.avatar}" alt="">
+          <a class="avatar-a" href="/user/${comment.User.id}">
+            <img src="${comment.User.avatar}" alt="">
+          </a>
           <div class="nameComment">
             <a href="/user/${comment.User.id}">${comment.User.name}</a>
             <p class="comment">${comment.comment}</p>
@@ -558,7 +570,7 @@
   }
   function commentControl(e) {
     const commentButton = document.querySelector('.comment-form button')
-    const charCount = document.querySelector('.comment-form-container span')
+    const charCount = document.querySelector('.comment-form-container .word-limit')
     const MaxCharCount = 250
     charCount.textContent = `${commentInput.value.length}`
     if (commentInput.value.length > MaxCharCount) {
