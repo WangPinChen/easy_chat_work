@@ -109,7 +109,13 @@
     border-bottom: 1px solid #cfdae3;
     display: flex;
     align-items: center;
-    padding: 0.2rem 2rem;
+    padding: 0.2rem 3rem;
+  }
+
+  .chat-contaier .chat-title a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .chat-contaier .chat-title .avatar-container {
@@ -361,10 +367,12 @@
 
     <div class="chat-contaier">
       <div class="chat-title">
-        <div class="avatar-container">
-          <img src="{{chatUser.avatar}}" alt="">
-        </div>
-        <p class="name">{{chatUser.name}}</p>
+        <a href="/user/{{chatUser.id}}">
+          <div class="avatar-container">
+            <img src="{{chatUser.avatar}}" alt="">
+          </div>
+          <p class="name">{{chatUser.name}}</p>
+        </a>
       </div>
       <div class="message-group">
 
@@ -437,7 +445,6 @@
     const recipientId = window.location.href.split('/')[window.location.href.split('/').length - 1]
     const cardGroup = document.querySelector('.card-group')
 
-    console.log(recipientId)
     function createUserCard(obj) {
       const card = document.createElement('a')
       card.classList.add('card', `user-id-${obj.id}`)
@@ -476,7 +483,6 @@
     }
     //監聽是否有自己的訊息，並且產生user-card
     socket.on(`${currentUser.id}`, msgObj => {
-      console.log()
       if (!cardGroup.querySelector(`.user-id-${msgObj.sender.id}`)) {
         createUserCard(msgObj.sender)
       } else if (cardGroup.querySelector(`.user-id-${msgObj.sender.id}`)) {
@@ -527,14 +533,10 @@
       const recipientRes = await axios.get(`/api/user/${recipientId}`)
       const recipient = recipientRes.data.user
       const senderId = currentUser.id.toString()
-      console.log(senderId)
       const nameSpaceArray = [recipientId, senderId]
       nameSpaceArray.sort((a, b) => { return a - b })
-      console.log(nameSpaceArray)
       nameSpaceArray.splice(1, 0, '_')
-      console.log(nameSpaceArray)
       const nameSpace = nameSpaceArray.join('')
-      console.log(nameSpace)
       //產生聊天對象的user-card
       if (!cardGroup.querySelector(`.user-id-${recipient.id}`)) {
         createUserCard(recipient)
@@ -566,11 +568,8 @@
 
             readMsgs.push(message.dataset.messageid)
             message.classList.remove("unread")
-
             const cardNotify = cardGroup.querySelector('.card .notify-icon')
             cardNotify.innerText = Number(cardNotify.innerText) - 1
-            console.log(message)
-            console.log(cardNotify.innerText)
             if (Number(cardNotify.innerText) === 0) {
               const notifyIcons = cardGroup.querySelectorAll('.notify-icon')
               unreadMessageCount = 0
@@ -585,14 +584,11 @@
             }
           }
         })
-        console.log(readMsgs)
       }
       //剛進入頁面時將目前可視範圍的message變成已讀
       readMsg()
       //監聽後端是否有來自xxxx_xxxx的消(xxxx為User id)
       socket.on(nameSpace, msgObj => {
-        console.log(msgObj)
-        console.log(msgObj.sender.id, senderId)
         //判斷訊息是否為自己發送的
         if (msgObj.sender.id.toString() === senderId) {
           messageGroup.innerHTML += `

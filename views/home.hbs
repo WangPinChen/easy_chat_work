@@ -543,16 +543,19 @@
   const avatarInput = document.querySelector('.avatar-input')
   const commentInput = document.querySelector('.comment-form input')
 
+  //開啟使用者編輯頁面
   if (faUserGear) {
     faUserGear.onclick = function () {
       modal.style.display = "block"
     }
   }
+  //關閉使用者編輯頁面
   if (closeBtn) {
     closeBtn.onclick = function () {
       modal.style.display = "none"
     }
   }
+  //關閉使用者編輯頁面
   window.onclick = function (event) {
     if (event.target == modal) {
       modal.style.display = "none"
@@ -568,6 +571,7 @@
       document.querySelector('.avatar-img').src = URL.createObjectURL(avatarInput.files[0])
     }
   }
+  //留言欄位控管，字數限制以及即時顯示字數
   function commentControl(e) {
     const commentButton = document.querySelector('.comment-form button')
     const charCount = document.querySelector('.comment-form-container .word-limit')
@@ -587,5 +591,5 @@
 
   backgroundInput.addEventListener('change', changeImage)
   avatarInput.addEventListener('change', changeImage)
-  commentInput.addEventListener('input', commentControl)
+  if (commentInput) commentInput.addEventListener('input', commentControl)
 </script>

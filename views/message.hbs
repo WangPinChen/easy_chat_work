@@ -371,7 +371,7 @@
           ${msgObj.user.id !== currentUser.id ?
             `
             <div class="chat-link">
-              <a href="/message/${msgObj.user.id}">
+              <a href="/message/private/${msgObj.user.id}">
                 <i class="fa-solid fa-message"></i>
               </a>
             </div>
@@ -466,6 +466,7 @@
     })
     // 調整在768px之下main底下的元素高度
     reHeightMain()
+    window.addEventListener('resize', reHeightMain)
     //監測使用者是否離開頁面
     window.addEventListener('beforeunload', () => {
       socket.emit('online_user', {

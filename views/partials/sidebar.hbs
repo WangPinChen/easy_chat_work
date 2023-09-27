@@ -215,7 +215,6 @@
 
     socket.on(`${currentUser.id}`, msgObj => {
       const privateNotifyIcon = document.querySelector('.private-message-li i .notify-icon')
-      console.log(`socket.get: nameSpace - ${currentUser.id}`)
       if (msgObj.type = 'privateMessage' && privateNotifyIcon === null) {
         const privateIcon = document.querySelector('.private-message-li i')
         const notifyIcon = document.createElement('div')

@@ -74,14 +74,16 @@
 
 
 <script>
-  const alertSuccess = document.querySelector('.alert')
-  setTimeout(() => {
-    alertSuccess.style.opacity = "0"
-  }, 3000)
+  const alert = document.querySelector('.alert')
+  if (alert !== null) {
+    setTimeout(() => {
+      alert.style.opacity = "0"
+    }, 3000)
 
-  const faXmark = document.querySelector('.fa-xmark')
-  function closeMsg() {
-    document.querySelector('.alert').remove()
+    const faXmark = document.querySelector('.fa-xmark')
+    function closeMsg() {
+      document.querySelector('.alert').remove()
+    }
+    faXmark.addEventListener('click', closeMsg)
   }
-  faXmark.addEventListener('click', closeMsg)
 </script>
