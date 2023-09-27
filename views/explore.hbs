@@ -163,19 +163,25 @@
     <div class="loader" id="loader" style="display: none;">Loading...</div>
   </main>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 <script>
   const loader = document.querySelector('.loader')
   let page = 1
-  let loading = false; // 添加 loading 标志
+  //為避免伺服器無法即時回應而發送兩次request，所以定義一個loading狀態
+  let loading = false
 
   async function loadUsers() {
-    if (loading) return; // 如果正在加载数据，则不执行新的请求
-    loading = true; // 设置 loading 为 true
+    //如果是loading狀態，離開函式
+    if (loading) return
+    //開始進入loading狀態
+    loading = true
+    //顯示Loading字樣
     loader.style.display = 'block'
     try {
+      //發送請求，包含頁數
       const res = await axios.get(`/api/explore?page=${page}`)
       const users = res.data.users
+      //如果有得到資料，將產生user card
       if (users.length > 0) {
         users.forEach(user => {
           const card = document.createElement('div')
@@ -204,9 +210,11 @@
         page += 1
         loader.style.display = 'none'
       }
+      //如果沒有使用者，將loader字樣改變為'No more'
       if (users.length === 0) {
-        loader.innerText = 'No more '
+        loader.innerText = 'No more'
       }
+      //函式結束，將loading狀態改回false
       loading = false
     } catch (error) {
       console.error(error);
@@ -218,9 +226,9 @@
     //window.scrollY 表示scroll bar到頁面頂部的位置
     //document.body.offsetHeight 表示整個網頁頁面高度
     if ((window.innerHeight + window.scrollY) * 1.25 >= document.body.offsetHeight) {
-      loadUsers();
+      loadUsers()
     }
-  });
+  })
 
   loadUsers()
 </script>

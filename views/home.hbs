@@ -507,11 +507,9 @@
 
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
 <script>
   const userId = window.location.href.match(/\/user\/(.+)/)?.[1]
-
+  //獲取comment資料
   axios.get(`/api/user/${userId}/comment`)
     .then(res => {
       const cardGroup = document.querySelector('.card-group')
@@ -534,7 +532,6 @@
         cardGroup.appendChild(card)
       })
     })
-
 
   const modal = document.getElementById("myModal")
   const faUserGear = document.querySelector('.fa-user-gear')

@@ -76,10 +76,11 @@
 <script>
   const alert = document.querySelector('.alert')
   if (alert !== null) {
+    //3秒後透過opacity效果隱藏訊息
     setTimeout(() => {
       alert.style.opacity = "0"
     }, 3000)
-
+    //點選'X'關閉訊息
     const faXmark = document.querySelector('.fa-xmark')
     function closeMsg() {
       document.querySelector('.alert').remove()

@@ -206,20 +206,23 @@
     const currentUserRes = await axios.get('/api/user')
     const currentUser = currentUserRes.data.user
     const checkUnreadMsgRes = await axios.get(`/api/user/${currentUser.id}/unread_message`)
-    if (!checkUnreadMsgRes.data.isRead) {
+
+    function createNotifyIcon() {
       const privateIcon = document.querySelector('.private-message-li i')
       const notifyIcon = document.createElement('div')
       notifyIcon.className = 'notify-icon'
       privateIcon.appendChild(notifyIcon)
     }
 
+    //如果有未讀訊息，增加小紅點於privateIcon
+    if (!checkUnreadMsgRes.data.isRead) {
+      createNotifyIcon()
+    }
+    //監聽是否有來自自己的訊息，並且增加小紅點
     socket.on(`${currentUser.id}`, msgObj => {
       const privateNotifyIcon = document.querySelector('.private-message-li i .notify-icon')
       if (msgObj.type = 'privateMessage' && privateNotifyIcon === null) {
-        const privateIcon = document.querySelector('.private-message-li i')
-        const notifyIcon = document.createElement('div')
-        notifyIcon.className = 'notify-icon'
-        privateIcon.appendChild(notifyIcon)
+        createNotifyIcon()
       }
     })
   })()
