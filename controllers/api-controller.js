@@ -17,11 +17,17 @@ const apiController = {
   getComment: async (req, res) => {
     const user = await User.findOne({
       where: { id: req.params.userId },
-      include: [Comment]
+      include: [Comment],
+      attributes: { exclude: ['password'] }
     })
     const comments = await Comment.findAll({
       where: { recipientId: req.params.userId },
-      include: [User]
+      include: [
+        {
+          model: User,
+          attributes: { exclude: ['password'] }
+        }
+      ]
     })
     res.json({ status: 'success', comments })
   },
@@ -37,13 +43,13 @@ const apiController = {
       },
       offset: (page - 1) * limit,
       limit,
+      attributes: { exclude: ['password'] }
     })
     res.json({ status: 'success', users })
   },
   readMsg: async (req, res) => {
     const messageIds = req.body.messageIds;
     for (const messageId of messageIds) {
-      console.log(messageId)
       await PrivateMsg.update(
         { isRead: true },
         { where: { id: messageId } }
@@ -52,7 +58,6 @@ const apiController = {
 
   },
   checkUnreadMsg: async (req, res) => {
-    console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXX')
     const message = await PrivateMsg.findOne({
       where: {
         recipientId: req.params.userId,
