@@ -61,7 +61,6 @@ module.exports = (io) => {
           return data
         })
         .then(data => {
-          console.log(msgObj)
           const { message, recipientId, senderId } = msgObj
           PrivateMsg.create({
             senderId,

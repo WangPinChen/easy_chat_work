@@ -194,8 +194,6 @@ const userController = {
     Promise.all([
       PrivateMsg.findAll({
         where: {
-          // senderId: req.params.userId,
-          // recipientId: req.user.id,
           senderId: { [Op.or]: [req.params.userId, req.user.id] },
           recipientId: { [Op.or]: [req.params.userId, req.user.id] },
         },
